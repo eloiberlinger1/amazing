@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environnements virtuels (indispensable pour Python)
+.venv/
+venv/
+ENV/
+env/
+
+# Caches de tests et de typage (Requis par le sujet)
+.mypy_cache/
+.pytest_cache/
+
+# Distribution / Build (Pour votre module mazegen)
+dist/
+build/
+*.egg-info/
+*.whl
+*.tar.gz
+
+# Fichiers de configuration IDE
+.vscode/
