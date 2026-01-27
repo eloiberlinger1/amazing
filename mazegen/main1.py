@@ -5,11 +5,13 @@ Docstring for mazegen.main
 from typing import Tuple, List, Dict
 from dataclasses import dataclass
 import random
+from render import printmaze
 
 
 @dataclass
 class MazeCell:
     """Represents a single cell in the maze"""
+
     north: bool
     south: bool
     east: bool
@@ -29,7 +31,7 @@ class MazeManager:
 
     def get_maze_container(self) -> List[List[MazeCell]]:
         """Initializes the grid with closed cells."""
- 
+
         container = []
         for i in range(self.height):
             row = []
@@ -60,8 +62,9 @@ class MazeManager:
                 cell_map[cell.coordinates] = cell
         return cell_map
 
-    def get_maze_cell_from_coordinate(self,
-                                      coordinate: Tuple[int, int]) -> MazeCell:
+    def get_maze_cell_from_coordinate(
+        self, coordinate: Tuple[int, int]
+    ) -> MazeCell:
         """Retrieve a MazeCell object using its coordinates."""
 
         try:
@@ -152,15 +155,18 @@ class MazeManager:
 
         return self.maze
 
-def print_maze(width: int = 10, height: int = 6) -> None:
-  ...???
+    def print_maze(self) -> None:
+        """
+        TEmporar function to pirnt the maze
+        """
+        myprintmaze = printmaze(self)
+        print(myprintmaze)
 
 
 def main():
     manager1 = MazeManager(6, 8, seed=123)
     manager1.generate_maze_dfs()
     manager1.print_maze()
-
 
 
 if __name__ == "__main__":
