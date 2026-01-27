@@ -11,11 +11,11 @@ from render import printmaze
 @dataclass
 class MazeCell:
     """Represents a single cell in the maze"""
-
     north: bool
     south: bool
     east: bool
     west: bool
+    fourty_two_pattern: bool
     coordinates: Tuple[int, int]
 
 
@@ -25,9 +25,59 @@ class MazeManager:
     def __init__(self, height: int, width: int, seed: int = None) -> None:
         self.height = height
         self.width = width
+        self.seed = seed
+        self.perfect = True
+
+        self.rng = random.Random(seed)
+
+        # 42 pattern coords (may be empty if maze too small)
+        self.pattern_coordinates: List[Tuple[int, int]] = (
+            self.get_pattern_coords()
+            if self.check_42_pattern_availability()
+            else []
+        )
 
         self.maze = self.get_maze_container()
         self._cell_map = self._create_cell_map()
+
+    def check_42_pattern_availability(self) -> bool:
+        if int(self.width) >= 14 and int(self.height) >= 10:
+            return True
+        print("The maze size too small, 42 pattern omitted!")
+        return False
+
+    def get_pattern_coords(self) -> List[Tuple[int, int]]:
+        """
+        Returns coordinates that draw a visible 42 using fully closed cells.
+        Pattern is centered in the maze.
+        """
+
+        coords: List[Tuple[int, int]] = []
+        upper_left = (int((self.height - 5) / 2)), int((self.width - 7) / 2)
+
+        # "4" part
+        coords.append(upper_left)
+        coords.append((upper_left[0] + 1, upper_left[1]))
+        coords.append((upper_left[0] + 2, upper_left[1]))
+        coords.append((upper_left[0] + 2, upper_left[1] + 1))
+        coords.append((upper_left[0] + 2, upper_left[1] + 2))
+        coords.append((upper_left[0] + 3, upper_left[1] + 2))
+        coords.append((upper_left[0] + 4, upper_left[1] + 2))
+
+        # "2" part
+        coords.append((upper_left[0],     upper_left[1] + 4))
+        coords.append((upper_left[0] + 2, upper_left[1] + 4))
+        coords.append((upper_left[0] + 3, upper_left[1] + 4))
+        coords.append((upper_left[0] + 4, upper_left[1] + 4))
+        coords.append((upper_left[0],     upper_left[1] + 5))
+        coords.append((upper_left[0] + 2, upper_left[1] + 5))
+        coords.append((upper_left[0] + 4, upper_left[1] + 5))
+        coords.append((upper_left[0],     upper_left[1] + 6))
+        coords.append((upper_left[0] + 1, upper_left[1] + 6))
+        coords.append((upper_left[0] + 2, upper_left[1] + 6))
+        coords.append((upper_left[0] + 4, upper_left[1] + 6))
+
+        return coords
 
     def get_maze_container(self) -> List[List[MazeCell]]:
         """Initializes the grid with closed cells."""
@@ -36,15 +86,28 @@ class MazeManager:
         for i in range(self.height):
             row = []
             for j in range(self.width):
-                row.append(
-                    MazeCell(
-                        False,
-                        False,
-                        False,
-                        False,
-                        (i, j),
+                if tuple([i, j]) in self.pattern_coordinates: 
+                    row.append(
+                        MazeCell(
+                            False,
+                            False,
+                            False,
+                            False,
+                            True,
+                            (i, j),
+                        )
                     )
-                )
+                else:
+                    row.append(
+                        MazeCell(
+                            False,
+                            False,
+                            False,
+                            False,
+                            False,
+                            (i, j),
+                        )
+                    )
             container.append(row)
 
         return container
@@ -62,9 +125,8 @@ class MazeManager:
                 cell_map[cell.coordinates] = cell
         return cell_map
 
-    def get_maze_cell_from_coordinate(
-        self, coordinate: Tuple[int, int]
-    ) -> MazeCell:
+    def get_maze_cell_from_coordinate(self,
+                                      coordinate: Tuple[int, int]) -> MazeCell:
         """Retrieve a MazeCell object using its coordinates."""
 
         try:
@@ -92,7 +154,7 @@ class MazeManager:
             Dictionary mapping direction strings ("north", ..., "west")
             to MazeCell objects that are unvisited neighbors
         """
-        ava_neighbors = {}
+        ava_neighbors: Dict[str, MazeCell]= {}
         north = (current_cell.coordinates[0] - 1, current_cell.coordinates[1])
         south = (current_cell.coordinates[0] + 1, current_cell.coordinates[1])
         east = (current_cell.coordinates[0], current_cell.coordinates[1] + 1)
@@ -108,13 +170,29 @@ class MazeManager:
             ava_neighbors["west"] = self.get_maze_cell_from_coordinate(west)
         return ava_neighbors
 
+    def make_imperfect(self) -> None:
+        """
+        Add extra openings to create loops (non-perfect maze)
+        """
+
+        ???
+
     def generate_maze_dfs(self, seed: int = None) -> List[List[MazeCell]]:
         if seed is not None:
-            random.seed(seed)
+            self.rng.seed(seed)
         # All cells start as unvisited
         available = self.get_all_coords()
+
+        # remove 42 pattern from DFS available list[tuples]
+        for coord in self.pattern_coordinates:
+            if coord in available:
+                available.remove(coord)
+
+        if not available:
+            return self.maze
+
         # Choose random starting point
-        start_coord = random.choice(available)
+        start_coord = self.rng.choice(available)
         available.remove(start_coord)
 
         # Stack for DFS backtracking - holds the path we've taken
@@ -131,7 +209,7 @@ class MazeManager:
                 continue
 
             # choose random direction
-            direction = random.choice(list(ava_neighbors.keys()))
+            direction = self.rng.choice(list(ava_neighbors.keys()))
             neighbor_cell = ava_neighbors[direction]
 
             # break the wall
@@ -150,9 +228,10 @@ class MazeManager:
 
             # marked as visited
             available.remove(neighbor_cell.coordinates)
-            # move to new position
+            # pushed to previous path stacks end
             stack.append(neighbor_cell.coordinates)
 
+        self.make_imperfect()
         return self.maze
 
     def print_maze(self) -> None:
