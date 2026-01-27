@@ -7,7 +7,6 @@ from dataclasses import dataclass
 import random
 from render import printmaze
 
-
 @dataclass
 class MazeCell:
     """Represents a single cell in the maze"""
@@ -22,11 +21,11 @@ class MazeCell:
 class MazeManager:
     """Manages maze generation, storage and display operations"""
 
-    def __init__(self, height: int, width: int, seed: int = None) -> None:
+    def __init__(self, height: int, width: int, seed: int = None, perfect: bool = True) -> None:
         self.height = height
         self.width = width
         self.seed = seed
-        self.perfect = True
+        self.perfect = perfect
 
         self.rng = random.Random(seed)
 
@@ -231,7 +230,8 @@ class MazeManager:
             # pushed to previous path stacks end
             stack.append(neighbor_cell.coordinates)
 
-        self.make_imperfect()
+        if not self.perfect:
+            self.make_imperfect()
         return self.maze
 
     def print_maze(self) -> None:
