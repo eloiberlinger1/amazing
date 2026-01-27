@@ -4,7 +4,7 @@ Docstring pour a_maze_ing
 """
 
 import sys
-from mazegen import *
+import mazegen
 
 
 def load_config(file_path: str) -> dict[str, str]:
@@ -39,6 +39,7 @@ def main():
         exit()
     config = load_config(config_file)
     print(config)
+    mazegen.print_maze(int(config["WIDTH"]), int(config["HEIGHT"]))
 
 
 main()

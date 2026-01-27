@@ -1,9 +1,25 @@
+"""
+Docstring for mazegen.main
+"""
+
+
 class MazeGenerator:
     def __init__(self):
         print("def")
 
 
-def main():
+class MazeCell:
+    north: bool
+    south: bool
+    east: bool
+    west: bool
+
+
+def print_maze(width: int, height: int) -> None:
+    """
+    Docstring for print_maze
+    """
+
     print("asd")
 
     walls = {
@@ -16,6 +32,12 @@ def main():
         "f": "▒",
     }
 
+    maze = [[MazeCell() for j in range(width)] for i in range(height)]
+    for j in maze:
+        for i in j:
+            print(walls["v"], end="")
+        print()
+
 
 if __name__ == "__main__":
-    main()
+    print_maze()
