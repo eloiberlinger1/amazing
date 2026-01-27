@@ -8,18 +8,17 @@ def load_config(file_path: str) -> dict[str, str]:
     """
     Load configuration file
     """
-    config_data: dict[str, str] = {} 
-    with open(file_path, 'r') as f:
+    config_data: dict[str, str] = {}
+    with open(file_path, "r") as f:
         for li in f:
             li = li.strip()
-            if ('=' in li):
-                li = li.split('=', 1)
+            if "=" in li:
+                li = li.split("=", 1)
                 key = li[0]
                 config_data[key] = li[1]
-                
+
     return config_data
-            
-        
+
 
 def main():
     """
@@ -30,7 +29,6 @@ def main():
     # get config values
     config = load_config("config.txt")
     print(config)
-
 
 
 main()
