@@ -164,7 +164,7 @@ class MazeManager:
 
 
 def main():
-    manager1 = MazeManager(6, 8, seed=123)
+    manager1 = MazeManager(15, 20, seed=123)
     manager1.generate_maze_dfs()
     manager1.print_maze()
 
