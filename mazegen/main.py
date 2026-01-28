@@ -13,8 +13,8 @@ class MazeCell:
     """Represents a single cell in the maze"""
 
     north: bool
-    south: bool
     east: bool
+    south: bool
     west: bool
     fourty_two_pattern: bool
     coordinates: Tuple[int, int]

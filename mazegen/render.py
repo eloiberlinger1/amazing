@@ -12,64 +12,95 @@ def printmaze(mazemanager) -> str:
     """
     maze = mazemanager.maze
 
-    # Tuple: (north, south, east, west)
+    # Tuple: (north, east, south, west)
     chars = {
-        (1, 1, 0, 0): "│",  # : Nord + Sud
-        (0, 0, 1, 1): "─",  # Est + Ouest
-        (1, 0, 1, 0): "╰",  # Nord + Est
-        (1, 0, 0, 1): "╯",  # Nord + Ouest
-        (0, 1, 1, 0): "╭",  # Sud + Est
-        (0, 1, 0, 1): "╮",  # Sud + Ouest
-        (1, 1, 1, 1): "┼",  # Nord + Sud + Est + Ouest
+        (1, 1, 0, 0): "╰",
+        (0, 0, 1, 1): "╮",
+        (1, 0, 1, 0): "│",
+        (1, 0, 0, 1): "╯",
+        (0, 1, 1, 0): "╭",
+        (1, 0, 0, 0): "│",
+        (0, 0, 1, 0): "│",
+        (0, 1, 0, 1): "─",
+        (0, 0, 0, 1): "─",
+        (0, 1, 0, 0): "─",
+        (1, 0, 1, 1): "┤",
+        (1, 1, 0, 1): "┴",
+        (0, 1, 1, 1): "┬",
+        (1, 1, 1, 0): "├",
+        (1, 1, 1, 1): "┼",
     }
 
-    caneva = List[List[str]]
+    # ====================
+    #      Canevas
+    # ====================
 
-    # demo
-    #
-    # ╭─╮╭─╮
-    # │ ││ │
-    # ╰─╯╰─╯
-    #
+    c_h = (mazemanager.height * 2) + 1
+    c_w = (mazemanager.width * 2) + 1
 
-    for i in range(((mazemanager.height * 2) + 1)):
+    canevas = [[True for _ in range(c_w)] for _ in range(c_h)]
 
-        line = []
+    for r in range(mazemanager.height):
+        for c in range(mazemanager.width):
+            cell = mazemanager.maze[r][c]
 
-        for j in range((mazemanager.width * 2) + 1):
+            caneva_r = (r * 2) + 1
+            caneva_c = (c * 2) + 1
 
-            if (i % 2 == 0) and (j % 2 == 0):
-                current_elt = " "
+            canevas[caneva_r][caneva_c] = False
 
-            # line.append(chars[maze[i][j].coordinates])
+            if cell.north:
+                canevas[caneva_r - 1][caneva_c] = False
+            if cell.south:
+                canevas[caneva_r + 1][caneva_c] = False
+            if cell.east:
+                canevas[caneva_r][caneva_c + 1] = False
+            if cell.west:
+                canevas[caneva_r][caneva_c - 1] = False
 
-        caneva.append(line)
+    # Preview
+    # for row in canevas:
+    #     print("".join(["█" if cell else " " for cell in row]))
 
-    for line in maze:
+    # ====================
+    #    Integer char
+    # ====================
 
-        l1, l2, l3 = "", "", ""
+    res = ""
 
-        for c in line:
+    for r in range(c_h):
+        line_str = ""
+        for c in range(c_w):
 
-            content = "   "
-            if c.coordinates == (0, 0):
-                content = " S "
-            elif c.coordinates == (14, 19):
-                content = " E "
-            elif c.coordinates == "solution":
-                content = " • "
+            if canevas[r][c]:
+                n = r > 0 and canevas[r - 1][c]
+                s = r < c_h - 1 and canevas[r + 1][c]
+                w = c > 0 and canevas[r][c - 1]
+                e = c < c_w - 1 and canevas[r][c + 1]
 
-            l1 += "╭───╮" if not c.north else "|   |"
-            l2 += (
-                ("|" if not c.west else " ")
-                + content
-                + ("|" if not c.east else " ")
-            )
-            l3 += "╰───╯" if not c.south else "|   |"
+                char = chars.get((int(n), int(e), int(s), int(w)), "┼")
+                line_str += char + ("─" if e else " ")
+            else:
+                content = " "
+                # Center of element
+                if r % 2 != 0 and c % 2 != 0:
+                    # TO DO: Replace by values from config file
+                    mr, mc = (r - 1) // 2, (c - 1) // 2
 
-        return_str += l1 + "\n" + l2 + "\n" + l3 + "\n"
+                    # Coords in original mze
+                    if (mr, mc) == (0, 0):
+                        content = "S"
 
-    return str(return_str)
+                    elif (mr, mc) == (
+                        mazemanager.height - 1,
+                        mazemanager.width - 1,
+                    ):
+                        content = "E"
+
+                line_str += content + " "
+        res += line_str + "\n"
+
+    return str(res)
 
 
 if __name__ == "__main__":
