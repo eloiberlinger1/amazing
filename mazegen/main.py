@@ -13,8 +13,8 @@ class MazeCell:
     """Represents a single cell in the maze"""
 
     north: bool
-    east: bool
     south: bool
+    east: bool
     west: bool
     fourty_two_pattern: bool
     coordinates: Tuple[int, int]
@@ -177,9 +177,84 @@ class MazeManager:
     def make_imperfect(self) -> None:
         """
         Add extra openings to create loops (non-perfect maze)
+        Note: it does not guarantee another well-looped path
         """
+        threshold = 0.35
 
-        pass
+        for row in self.maze:
+            for cell in row:
+                # jump over coordinates in 42 pattern
+                if cell.coordinates in self.pattern_coordinates:
+                    continue
+                r, c = cell.coordinates
+
+                # walls show the blocked side(s) of a cell
+                walls = []
+                if not cell.north:
+                    walls.append("north")
+                if not cell.south:
+                    walls.append("south")
+                if not cell.east:
+                    walls.append("east")
+                if not cell.west:
+                    walls.append("west")
+
+                # Only target dead-ends (3 blocked walls)
+                # to keep changes small and controlled.
+                if len(walls) != 3:
+                    continue
+
+                # remove candidate wall directions that point outside the maze
+                if r == 0 and "north" in walls:
+                    # r == 0 is the rule to avoid breaking
+                    # the outside north border wall
+                    # "north" in walls for remove() to avoid reporting an error
+                    walls.remove("north")
+                if c == 0 and "west" in walls:
+                    walls.remove("west")
+                    # height = row number of coordinates
+                    # width = cell/column number of coordinates
+                    # r: 0..height-1 (row index)
+                    # c: 0..width-1  (col index)
+                if r == self.height - 1 and "south" in walls:
+                    walls.remove("south")
+                if c == self.width - 1 and "east" in walls:
+                    walls.remove("east")
+
+                # remove 42-pattern-nearby cell directions that point to 42
+                # ensure 42 border block and cells one step back nearby
+                # have the same blocked status
+                # for the shared wall
+
+                if (r - 1, c) in self.pattern_coordinates and "north" in walls:
+                    walls.remove("north")
+                if (r + 1, c) in self.pattern_coordinates and "south" in walls:
+                    walls.remove("south")
+                if (r, c - 1) in self.pattern_coordinates and "west" in walls:
+                    walls.remove("west")
+                if (r, c + 1) in self.pattern_coordinates and "east" in walls:
+                    walls.remove("east")
+
+                if not walls:
+                    continue
+
+                if self.rng.random() > threshold:
+                    continue
+
+                choice = self.rng.choice(walls)
+
+                if choice == "north":
+                    cell.north = True
+                    self.get_maze_cell_from_coordinate((r - 1, c)).south = True
+                elif choice == "south":
+                    cell.south = True
+                    self.get_maze_cell_from_coordinate((r + 1, c)).north = True
+                elif choice == "east":
+                    cell.east = True
+                    self.get_maze_cell_from_coordinate((r, c + 1)).west = True
+                elif choice == "west":
+                    cell.west = True
+                    self.get_maze_cell_from_coordinate((r, c - 1)).east = True
 
     def generate_maze_dfs(self, seed: int = None) -> List[List[MazeCell]]:
         if seed is not None:
@@ -255,3 +330,28 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# seed()      → 决定“随机序列长什么样”
+# random()   → 从这个序列里取下一个 0~1 的数
+#
+# Maze Project – Implementation Checklist
+# ✅ Completed
+# Random maze generation using DFS
+# Seed-based reproducibility (random.Random(seed))
+# Each cell has 4 directional walls (N / E / S / W)
+# Wall consistency between neighboring cells (no mismatches)
+# Full connectivity for all non-“42” cells
+# “42” pattern implemented as fully closed, isolated cells
+# External maze borders remain closed
+# PERFECT = true generates a loop-free (tree) maze
+# PERFECT = false allows controlled loops (imperfect maze)
+#
+# ❌ Not Implemented Yet
+# Explicit maze entry and exit cells
+# Opening external walls for entry / exit
+# Enforcing “exactly one path between entry and exit” (semantic level)
+# Validation to prevent large open areas (e.g. 3×3 open blocks)
+#
+# ℹ️ Notes
+# DFS start cell is internal only and is not the maze entry
+# Maze is structurally valid but currently fully enclosed
