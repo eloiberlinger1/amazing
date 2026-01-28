@@ -7,9 +7,11 @@ from dataclasses import dataclass
 import random
 from render import printmaze
 
+
 @dataclass
 class MazeCell:
     """Represents a single cell in the maze"""
+
     north: bool
     south: bool
     east: bool
@@ -21,7 +23,9 @@ class MazeCell:
 class MazeManager:
     """Manages maze generation, storage and display operations"""
 
-    def __init__(self, height: int, width: int, seed: int = None, perfect: bool = True) -> None:
+    def __init__(
+        self, height: int, width: int, seed: int = None, perfect: bool = True
+    ) -> None:
         self.height = height
         self.width = width
         self.seed = seed
@@ -64,14 +68,14 @@ class MazeManager:
         coords.append((upper_left[0] + 4, upper_left[1] + 2))
 
         # "2" part
-        coords.append((upper_left[0],     upper_left[1] + 4))
+        coords.append((upper_left[0], upper_left[1] + 4))
         coords.append((upper_left[0] + 2, upper_left[1] + 4))
         coords.append((upper_left[0] + 3, upper_left[1] + 4))
         coords.append((upper_left[0] + 4, upper_left[1] + 4))
-        coords.append((upper_left[0],     upper_left[1] + 5))
+        coords.append((upper_left[0], upper_left[1] + 5))
         coords.append((upper_left[0] + 2, upper_left[1] + 5))
         coords.append((upper_left[0] + 4, upper_left[1] + 5))
-        coords.append((upper_left[0],     upper_left[1] + 6))
+        coords.append((upper_left[0], upper_left[1] + 6))
         coords.append((upper_left[0] + 1, upper_left[1] + 6))
         coords.append((upper_left[0] + 2, upper_left[1] + 6))
         coords.append((upper_left[0] + 4, upper_left[1] + 6))
@@ -85,7 +89,7 @@ class MazeManager:
         for i in range(self.height):
             row = []
             for j in range(self.width):
-                if tuple([i, j]) in self.pattern_coordinates: 
+                if tuple([i, j]) in self.pattern_coordinates:
                     row.append(
                         MazeCell(
                             False,
@@ -124,8 +128,9 @@ class MazeManager:
                 cell_map[cell.coordinates] = cell
         return cell_map
 
-    def get_maze_cell_from_coordinate(self,
-                                      coordinate: Tuple[int, int]) -> MazeCell:
+    def get_maze_cell_from_coordinate(
+        self, coordinate: Tuple[int, int]
+    ) -> MazeCell:
         """Retrieve a MazeCell object using its coordinates."""
 
         try:
@@ -153,7 +158,7 @@ class MazeManager:
             Dictionary mapping direction strings ("north", ..., "west")
             to MazeCell objects that are unvisited neighbors
         """
-        ava_neighbors: Dict[str, MazeCell]= {}
+        ava_neighbors: Dict[str, MazeCell] = {}
         north = (current_cell.coordinates[0] - 1, current_cell.coordinates[1])
         south = (current_cell.coordinates[0] + 1, current_cell.coordinates[1])
         east = (current_cell.coordinates[0], current_cell.coordinates[1] + 1)
@@ -174,7 +179,7 @@ class MazeManager:
         Add extra openings to create loops (non-perfect maze)
         """
 
-        ???
+        pass
 
     def generate_maze_dfs(self, seed: int = None) -> List[List[MazeCell]]:
         if seed is not None:

@@ -25,20 +25,23 @@ def printmaze(mazemanager) -> str:
 
     caneva = List[List[str]]
 
-    for i in range(((mazemanager.height * 2) + 1)):
+    # demo
+    #
+    # ╭─╮╭─╮
+    # │ ││ │
+    # ╰─╯╰─╯
+    #
 
-# demo
-#
-# ╭─╮
-# │ │
-# ╰─╯
-#
+    for i in range(((mazemanager.height * 2) + 1)):
 
         line = []
 
         for j in range((mazemanager.width * 2) + 1):
-            if (i % 2 == 0):
-            line.append(chars[maze[i][j].coordinates])
+
+            if (i % 2 == 0) and (j % 2 == 0):
+                current_elt = " "
+
+            # line.append(chars[maze[i][j].coordinates])
 
         caneva.append(line)
 
