@@ -3,7 +3,7 @@ Print the maze
 
 """
 
-from typing import List, Tuple, Protocol
+from typing import Protocol
 from .models import MazeCell
 
 
@@ -37,7 +37,7 @@ class MazeRender:
         (1, 1, 1, 1): "┼",
     }
 
-    def __init__(self, entry: Tuple[int, int], exit: Tuple[int, int]):
+    def __init__(self, entry: tuple[int, int], exit: tuple[int, int]):
         """Initialize Maze renderer with entry and exit points"""
         self.entry = entry
         self.exit = exit
@@ -123,12 +123,12 @@ class MazeRender:
                         mr, mc = (r - 1) // 2, (c - 1) // 2
 
                         # Coords in original mze
-                        if (mr, mc) == (0, 0):
+                        if (mr, mc) == self.entry:
                             content = "S"
 
                         elif (mr, mc) == (
-                            generated_maze.height - 1,
-                            generated_maze.width - 1,
+                            self.exit[0],
+                            self.exit[1],
                         ):
                             content = "E"
 

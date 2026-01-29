@@ -307,7 +307,7 @@ class MazeManager:
         TEmporar function to pirnt the maze
         """
         renderer = MazeRender(
-            entry=(0, 0), exit=(self.height - 1, self.width - 1)
+            entry=self.entry, exit=self.exit
         )
         myprintmaze = renderer.render(self)
         print(myprintmaze)
