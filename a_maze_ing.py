@@ -3,7 +3,7 @@
 Docstring pour a_maze_ing
 """
 
-from config_loader import load_config
+from config_loader import get_config
 import sys
 import mazegen
 
@@ -19,7 +19,7 @@ def main():
         print("Correct usage: python3 a_maze_ing.py <config_file>")
         exit()
 
-    config = load_config(config_file)
+    config = get_config(config_file)
     print(config)
     mazegen.print_maze(int(config["WIDTH"]), int(config["HEIGHT"]))
 
