@@ -3,7 +3,7 @@ Docstring for mazegen.main
 """
 
 from .models import MazeCell
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Any
 from .render import MazeRender
 import random
 
@@ -11,13 +11,13 @@ import random
 class MazeManager:
     """Manages maze generation, storage and display operations"""
 
-    def __init__(
-        self, height: int, width: int, seed: int = None, perfect: bool = True
-    ) -> None:
-        self.height = height
-        self.width = width
-        self.seed = seed
-        self.perfect = False
+    def __init__(self, config: dict[str, Any]) -> None:
+        self.height = config["HEIGHT"]
+        self.width = config["WIDTH"]
+        self.seed = config["SEED"]
+        self.perfect = config["PERFECT"]
+        self.entry = config["ENTRY"]
+        self.exit = config["EXIT"]
 
         self.rng = random.Random()
 
@@ -313,29 +313,8 @@ class MazeManager:
         print(myprintmaze)
 
 
-def print_maze(width: int, height: int, seed: int = None, perfect: bool = True) -> None:
-    """
-    Generate and print a maze with the given dimensions.
-    
-    Args:
-        width: Width of the maze
-        height: Height of the maze
-        seed: Random seed for reproducibility (optional)
-        perfect: If True, generates a perfect maze (no loops). If False, generates an imperfect maze with loops.
-    """
-    manager = MazeManager(height, width, seed=seed, perfect=perfect)
-    manager.generate_maze_dfs()
-    manager.print_maze()
-
-
-def main():
-    manager1 = MazeManager(15, 20, seed=123)
-    manager1.generate_maze_dfs()
-    manager1.print_maze()
-
-
 if __name__ == "__main__":
-    main()
+    exit()
 
 # seed()      → 决定“随机序列长什么样”
 # random()   → 从这个序列里取下一个 0~1 的数

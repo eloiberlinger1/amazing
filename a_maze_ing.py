@@ -5,7 +5,7 @@ Docstring pour a_maze_ing
 
 from config_loader import get_config
 import sys
-import mazegen
+from mazegen import MazeManager
 
 
 def main():
@@ -21,7 +21,10 @@ def main():
 
     config = get_config(config_file)
     print(config)
-    mazegen.print_maze(int(config["WIDTH"]), int(config["HEIGHT"]))
+    # mm = MazeManager(15, 20, seed=123)
+    mm = MazeManager(config)
+    mm.generate_maze_dfs()
+    mm.print_maze()
 
 
 main()
