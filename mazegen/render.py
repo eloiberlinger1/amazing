@@ -4,7 +4,7 @@ Print the maze
 """
 
 from typing import List, Tuple, Protocol
-from models import MazeCell
+from .models import MazeCell
 
 
 class MazeManagerProtocol(Protocol):

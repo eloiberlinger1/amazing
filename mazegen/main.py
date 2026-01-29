@@ -2,9 +2,9 @@
 Docstring for mazegen.main
 """
 
-from models import MazeCell
+from .models import MazeCell
 from typing import Tuple, List, Dict
-from render import MazeRender
+from .render import MazeRender
 import random
 
 
@@ -17,9 +17,9 @@ class MazeManager:
         self.height = height
         self.width = width
         self.seed = seed
-        self.perfect = perfect
+        self.perfect = False
 
-        self.rng = random.Random(seed)
+        self.rng = random.Random()
 
         # 42 pattern coords (may be empty if maze too small)
         self.pattern_coordinates: List[Tuple[int, int]] = (
@@ -311,6 +311,21 @@ class MazeManager:
         )
         myprintmaze = renderer.render(self)
         print(myprintmaze)
+
+
+def print_maze(width: int, height: int, seed: int = None, perfect: bool = True) -> None:
+    """
+    Generate and print a maze with the given dimensions.
+    
+    Args:
+        width: Width of the maze
+        height: Height of the maze
+        seed: Random seed for reproducibility (optional)
+        perfect: If True, generates a perfect maze (no loops). If False, generates an imperfect maze with loops.
+    """
+    manager = MazeManager(height, width, seed=seed, perfect=perfect)
+    manager.generate_maze_dfs()
+    manager.print_maze()
 
 
 def main():
