@@ -2,22 +2,10 @@
 Docstring for mazegen.main
 """
 
+from models import MazeCell
 from typing import Tuple, List, Dict
-from dataclasses import dataclass
+from render import MazeRender
 import random
-from render import printmaze
-
-
-@dataclass
-class MazeCell:
-    """Represents a single cell in the maze"""
-
-    north: bool
-    south: bool
-    east: bool
-    west: bool
-    fourty_two_pattern: bool
-    coordinates: Tuple[int, int]
 
 
 class MazeManager:
@@ -318,7 +306,10 @@ class MazeManager:
         """
         TEmporar function to pirnt the maze
         """
-        myprintmaze = printmaze(self)
+        renderer = MazeRender(
+            entry=(0, 0), exit=(self.height - 1, self.width - 1)
+        )
+        myprintmaze = renderer.render(self)
         print(myprintmaze)
 
 

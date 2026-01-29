@@ -3,8 +3,18 @@ Print the maze
 
 """
 
-from typing import List
-from main import MazeManager
+from typing import List, Tuple, Protocol
+from models import MazeCell
+
+
+class MazeManagerProtocol(Protocol):
+    """
+    Minimal expected MazeManager to process rendering
+    """
+
+    height: int
+    width: int
+    maze: list[list[MazeCell]]
 
 
 class MazeRender:
@@ -27,13 +37,13 @@ class MazeRender:
         (1, 1, 1, 1): "┼",
     }
 
-    def __init__(
-        self, entry: Tuple[int, int] = None, exit: Tuple[int, int] = None
-    ):
+    def __init__(self, entry: Tuple[int, int], exit: Tuple[int, int]):
         """Initialize Maze renderer with entry and exit points"""
         self.entry = entry
         self.exit = exit
 
+        self.height = 0
+        self.width = 0
         self.canevas_h = 0
         self.canevas_w = 0
 
@@ -41,8 +51,8 @@ class MazeRender:
         """
         Docstring for _get_canva
         """
-        c_h = (h * 2) + 1
-        c_w = (w * 2) + 1
+        c_h = self.canevas_h
+        c_w = self.canevas_w
 
         canevas = [[True for _ in range(c_w)] for _ in range(c_h)]
 
@@ -68,16 +78,16 @@ class MazeRender:
 
     def render(
         self,
-        generated_maze: MazeManager,
+        generated_maze: MazeManagerProtocol,
     ) -> str:
         """
         Docstring for printmaze
         """
         self.maze = generated_maze.maze
-
-        # Tuple: (north, east, south, west)
-
-        #      Canevas
+        self.height = generated_maze.height
+        self.width = generated_maze.width
+        self.canevas_h = (self.height * 2) + 1
+        self.canevas_w = (self.width * 2) + 1
 
         canevas = self._get_canevas(
             generated_maze.height, generated_maze.width
@@ -87,6 +97,8 @@ class MazeRender:
         #    Integer char
         # ====================
 
+        c_h = self.canevas_h
+        c_w = self.canevas_w
         res = ""
 
         for r in range(c_h):
@@ -127,4 +139,4 @@ class MazeRender:
 
 
 if __name__ == "__main__":
-    printmaze(None)
+    exit()
