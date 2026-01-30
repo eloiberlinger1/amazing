@@ -6,6 +6,7 @@ from models import MazeCell
 from typing import Tuple, List, Dict
 from render import MazeRender
 import random
+from bfs import BFS
 
 
 class MazeManager:
@@ -317,7 +318,20 @@ class MazeManager:
 def main():
     manager1 = MazeManager(15, 20, seed=123)
     manager1.generate_maze_dfs()
+    bfs = BFS()
+    start = (0, 0)
+    end = (manager1.height - 1, manager1.width - 1)
     manager1.print_maze()
+
+    path = bfs.pathfind(
+        maze=manager1.maze,
+        height=manager1.height,
+        width=manager1.width,
+        start=start,
+        end=end
+    )
+
+    print("BFS path:", path)
 
 
 if __name__ == "__main__":
