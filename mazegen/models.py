@@ -10,7 +10,7 @@ class MazeCell:
     south: bool
     east: bool
     west: bool
-    fourty_two_pattern: bool
+    forty_two_pattern: bool
     coordinates: Tuple[int, int]
 
 

@@ -26,7 +26,7 @@ class BFS:
             return None
         if maze[start[0]][start[1]].forty_two_pattern:
             return None
-        if maze[start[0]][start[1]].forty_two_pattern:
+        if maze[end[0]][end[1]].forty_two_pattern:
             return None
 
         queue: Deque[Tuple[int, int]] = deque([start])
@@ -56,7 +56,7 @@ class BFS:
             current: tuple[int, int] = path[i]
             next_pos: tuple[int, int] = path[i + 1]
             row_diff: int = next_pos[0] - current[0]  # -1 up, 1 down
-            col_diff: int = next_pos[i] - current[1]  # -1 left, 1 right
+            col_diff: int = next_pos[1] - current[1]  # -1 left, 1 right
             if row_diff == -1:
                 directions.append("N")
             elif row_diff == 1:
