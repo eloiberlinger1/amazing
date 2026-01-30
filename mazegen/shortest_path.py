@@ -10,7 +10,7 @@ class BFS:
     but BFS returns the first one discovered according to the FIFO principle.
     """
 
-    def pathfind(
+    def shortest_path(
       self,
       maze: List[List[MazeCell]],
       height: int,
