@@ -138,8 +138,8 @@ class MazeRender:
         """
         Docstring for _write_path
         """
-        path_directions = path_to_directions(path)
-        for c in path_directions:
+        directions = path_to_directions(path)
+        for c in directions:
             f.write(c)
 
     def save_maze_file(self, path: List[Tuple[int, int]]) -> None:
