@@ -37,7 +37,9 @@ class MazeRender:
         (1, 1, 1, 1): "┼",
     }
 
-    def __init__(self, entry: tuple[int, int], exit: tuple[int, int]):
+    def __init__(
+        self, o_file: str, entry: tuple[int, int], exit: tuple[int, int]
+    ):
         """Initialize Maze renderer with entry and exit points"""
         self.entry = entry
         self.exit = exit
@@ -46,6 +48,8 @@ class MazeRender:
         self.width = 0
         self.canevas_h = 0
         self.canevas_w = 0
+
+        self.o_file = o_file
 
     def _get_canevas(self, h: int, w: int) -> list[list[bool]]:
         """
@@ -75,6 +79,44 @@ class MazeRender:
                     canevas[caneva_r][caneva_c - 1] = False
 
         return canevas
+
+    def _write_maze_file(self, f):
+
+        final_content: List[str] = []
+
+        for line in self.maze:
+            line_str = ""
+            for cell in line:
+
+                # 1 = 0001 in binary
+                # 2 = 0010 in binary
+                # 4 = 0100 in binary
+                # 8 = 1000 in binary
+
+                value = 0
+                if cell.north:
+                    value |= 1
+                if cell.east:
+                    value |= 2
+                if cell.south:
+                    value |= 4
+                if cell.west:
+                    value |= 8
+
+                print("VALUE :")
+                print(str(value))
+
+                line_str += str(value)
+
+            final_content.append(str(line_str))
+
+        for l in final_content:
+            f.write(l + "\n")
+
+    def save_maze_file(self) -> None:
+
+        with open(self.o_file, "w") as file:
+            self._write_maze_file(file)
 
     def render(
         self,
@@ -135,6 +177,8 @@ class MazeRender:
 
                     line_str += content + " "
             res += line_str + "\n"
+
+        self.save_maze_file()
 
         return str(res)
 

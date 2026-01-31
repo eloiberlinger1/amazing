@@ -20,7 +20,7 @@ def main():
         exit()
 
     config = get_config(config_file)
-    print(config)
+    # print(config)
     # mm = MazeManager(15, 20, seed=123)
     mm = MazeManager(config)
     mm.generate_maze_dfs()

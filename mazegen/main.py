@@ -3,10 +3,9 @@ Docstring for mazegen.main
 """
 
 import random
-from typing import Tuple, List, Dict, Any, Optional
+from typing import Tuple, List, Dict, Any
 from .models import MazeCell
 from .render import MazeRender
-from .shortest_path import BFS
 
 
 class MazeManager:
@@ -14,13 +13,22 @@ class MazeManager:
 
     def __init__(self, config: dict[str, Any]) -> None:
         # Validate required configuration keys
-        required_keys = ("HEIGHT", "WIDTH", "SEED", "PERFECT", "ENTRY", "EXIT")
+        required_keys = (
+            "HEIGHT",
+            "OUTPUT_FILE",
+            "WIDTH",
+            "SEED",
+            "PERFECT",
+            "ENTRY",
+            "EXIT",
+        )
         missing_keys = [key for key in required_keys if key not in config]
         if missing_keys:
             raise ValueError(
                 f"Missing required configuration keys for MazeManager: {', '.join(missing_keys)}"
             )
         # Basic type and value validation
+        o_file = config["OUTPUT_FILE"]
         height = config["HEIGHT"]
         width = config["WIDTH"]
         seed = config["SEED"]
@@ -56,12 +64,13 @@ class MazeManager:
                 f"EXIT must be a tuple of two integers (row, col), got {exit_!r}"
             )
         # Assign validated configuration
-        self.height = height
-        self.width = width
-        self.seed = seed
-        self.perfect = perfect
-        self.entry = entry
-        self.exit = exit_
+        self.height: int = height
+        self.width: int = width
+        self.seed: int | None = seed
+        self.o_file: str = o_file
+        self.perfect: bool = perfect
+        self.entry: Tuple[int, int] = entry
+        self.exit: Tuple[int, int] = exit_
 
         self.rng = random.Random()
 
@@ -72,8 +81,10 @@ class MazeManager:
             else []
         )
 
-        self.maze = self.get_maze_container()
-        self._cell_map = self._create_cell_map()
+        self.maze: List[List[MazeCell]] = self.get_maze_container()
+        self._cell_map: Dict[Tuple[int, int], MazeCell] = (
+            self._create_cell_map()
+        )
 
     def check_42_pattern_availability(self) -> bool:
         if int(self.width) >= 14 and int(self.height) >= 10:
@@ -351,7 +362,9 @@ class MazeManager:
         """
         Use the render to print the maze
         """
-        renderer = MazeRender(entry=self.entry, exit=self.exit)
+        renderer = MazeRender(
+            o_file=self.o_file, entry=self.entry, exit=self.exit
+        )
         myprintmaze = renderer.render(self, path)
         print(myprintmaze)
 
@@ -369,10 +382,6 @@ if __name__ == "__main__":
 # 42 pattern handled
 # BFS shortest path algorithm works
 # [TO DO]
-# !!! Config → program integration
-# 1.1 Parse WIDTH, HEIGHT, ENTRY, EXIT, OUTPUT_FILE, PERFECT, SEED
-# 1.2 Convert ENTRY/EXIT from x,y to (row,col)
-# 1.3 Remove hard-coded values
 # !!! Output file
 # 2.1 Hex wall encoding
 # 2.2 Write maze grid to OUTPUT_FILE
