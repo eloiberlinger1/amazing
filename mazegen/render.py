@@ -3,8 +3,9 @@ Print the maze
 
 """
 
-from typing import Protocol, Tuple, List
+from typing import TextIO, Protocol, Tuple, List
 from .models import MazeCell
+from .shortest_path import path_to_directions
 
 
 class MazeManagerProtocol(Protocol):
@@ -80,7 +81,12 @@ class MazeRender:
 
         return canevas
 
-    def _write_maze_file(self, f):
+    def _write_maze_file(self, f: TextIO):
+        """
+        Docstring for _write_maze_file
+
+        Write the maze cells values in HEX format
+        """
 
         final_content: List[str] = []
 
@@ -112,10 +118,41 @@ class MazeRender:
         for li in final_content:
             f.write(li + "\n")
 
-    def save_maze_file(self) -> None:
+    def _write_se(self, f: TextIO):
+        """
+        Docstring for _write_se
+
+        Write the enty and exit coordinates on the output file
+        """
+
+        final_content: List[str] = []
+
+        final_content.append(f"{self.entry[0]},{self.entry[1]}")
+        final_content.append(f"{self.exit[0]},{self.exit[1]}")
+
+        f.write("\n")
+        for li in final_content:
+            f.write(li + "\n")
+
+    def _write_path(self, f, path: List[Tuple[int, int]]) -> None:
+        """
+        Docstring for _write_path
+        """
+        path_directions = path_to_directions(path)
+        for c in path_directions:
+            f.write(c)
+
+    def save_maze_file(self, path: List[Tuple[int, int]]) -> None:
+        """
+        Docstring for save_maze_file
+
+        Handles the Maze output file
+        """
 
         with open(self.o_file, "w") as file:
             self._write_maze_file(file)
+            self._write_se(file)
+            self._write_path(file, path)
 
     def render(
         self,
@@ -177,7 +214,7 @@ class MazeRender:
                     line_str += content + " "
             res += line_str + "\n"
 
-        self.save_maze_file()
+        self.save_maze_file(path)
 
         return str(res)
 

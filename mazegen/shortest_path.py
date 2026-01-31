@@ -3,6 +3,32 @@ from typing import Deque, Dict, List, Optional, Tuple
 from .models import MazeCell
 
 
+def path_to_directions(path: List[Tuple[int, int]]) -> List[str]:
+    """
+    Convert a path of coordinates
+    to a list of directions (N, E, S, W)
+    """
+
+    if len(path) < 2:
+        return []
+
+    directions: list[str] = []
+    for i in range(len(path) - 1):
+        current: tuple[int, int] = path[i]
+        next_pos: tuple[int, int] = path[i + 1]
+        row_diff: int = next_pos[0] - current[0]  # -1 up, 1 down
+        col_diff: int = next_pos[1] - current[1]  # -1 left, 1 right
+        if row_diff == -1:
+            directions.append("N")
+        elif row_diff == 1:
+            directions.append("S")
+        elif col_diff == -1:
+            directions.append("W")
+        elif col_diff == 1:
+            directions.append("E")
+    return directions
+
+
 class BFS:
     """
     Breadtg-First Search
@@ -43,31 +69,6 @@ class BFS:
                     queue.append(neighbor)
 
         return None
-
-    def path_to_directions(self, path: List[Tuple[int, int]]) -> List[str]:
-        """
-        Convert a path of coordinates
-        to a list of directions (N, E, S, W)
-        """
-
-        if len(path) < 2:
-            return []
-
-        directions: list[str] = []
-        for i in range(len(path) - 1):
-            current: tuple[int, int] = path[i]
-            next_pos: tuple[int, int] = path[i + 1]
-            row_diff: int = next_pos[0] - current[0]  # -1 up, 1 down
-            col_diff: int = next_pos[1] - current[1]  # -1 left, 1 right
-            if row_diff == -1:
-                directions.append("N")
-            elif row_diff == 1:
-                directions.append("S")
-            elif col_diff == -1:
-                directions.append("W")
-            elif col_diff == 1:
-                directions.append("E")
-        return directions
 
     # ----------helpers---------------
 
