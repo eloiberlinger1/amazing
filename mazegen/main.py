@@ -6,7 +6,6 @@ import random
 from typing import Tuple, List, Dict, Any
 from .models import MazeCell
 from .render import MazeRender
-from .shortest_path import BFS
 
 
 class MazeManager:
@@ -14,13 +13,22 @@ class MazeManager:
 
     def __init__(self, config: dict[str, Any]) -> None:
         # Validate required configuration keys
-        required_keys = ("HEIGHT", "WIDTH", "SEED", "PERFECT", "ENTRY", "EXIT")
+        required_keys = (
+            "HEIGHT",
+            "OUTPUT_FILE",
+            "WIDTH",
+            "SEED",
+            "PERFECT",
+            "ENTRY",
+            "EXIT",
+        )
         missing_keys = [key for key in required_keys if key not in config]
         if missing_keys:
             raise ValueError(
                 f"Missing required configuration keys for MazeManager: {', '.join(missing_keys)}"
             )
         # Basic type and value validation
+        o_file = config["OUTPUT_FILE"]
         height = config["HEIGHT"]
         width = config["WIDTH"]
         seed = config["SEED"]
@@ -28,19 +36,25 @@ class MazeManager:
         entry = config["ENTRY"]
         exit_ = config["EXIT"]
         if not isinstance(height, int) or height <= 0:
-            raise ValueError(f"HEIGHT must be a positive integer, got {height!r}")
+            raise ValueError(
+                f"HEIGHT must be a positive integer, got {height!r}"
+            )
         if not isinstance(width, int) or width <= 0:
-            raise ValueError(f"WIDTH must be a positive integer, got {width!r}")
+            raise ValueError(
+                f"WIDTH must be a positive integer, got {width!r}"
+            )
         if seed is not None and not isinstance(seed, int):
             raise ValueError(f"SEED must be an int or None, got {seed!r}")
         if not isinstance(perfect, bool):
             raise ValueError(f"PERFECT must be a bool, got {perfect!r}")
+
         def _is_coord(value: Any) -> bool:
             return (
                 isinstance(value, tuple)
                 and len(value) == 2
                 and all(isinstance(v, int) for v in value)
             )
+
         if not _is_coord(entry):
             raise ValueError(
                 f"ENTRY must be a tuple of two integers (row, col), got {entry!r}"
@@ -50,12 +64,13 @@ class MazeManager:
                 f"EXIT must be a tuple of two integers (row, col), got {exit_!r}"
             )
         # Assign validated configuration
-        self.height = height
-        self.width = width
-        self.seed = seed
-        self.perfect = perfect
-        self.entry = entry
-        self.exit = exit_
+        self.height: int = height
+        self.width: int = width
+        self.seed: int | None = seed
+        self.o_file: str = o_file
+        self.perfect: bool = perfect
+        self.entry: Tuple[int, int] = entry
+        self.exit: Tuple[int, int] = exit_
 
         self.rng = random.Random()
 
@@ -66,8 +81,10 @@ class MazeManager:
             else []
         )
 
-        self.maze = self.get_maze_container()
-        self._cell_map = self._create_cell_map()
+        self.maze: List[List[MazeCell]] = self.get_maze_container()
+        self._cell_map: Dict[Tuple[int, int], MazeCell] = (
+            self._create_cell_map()
+        )
 
     def check_42_pattern_availability(self) -> bool:
         if int(self.width) >= 14 and int(self.height) >= 10:
@@ -341,35 +358,15 @@ class MazeManager:
             self.make_imperfect()
         return self.maze
 
-    def print_maze(self) -> None:
+    def print_maze(self, path: List[Tuple[int, int]]) -> None:
         """
-        TEmporar function to pirnt the maze
+        Use the render to print the maze
         """
-        renderer = MazeRender(entry=self.entry, exit=self.exit)
-        myprintmaze = renderer.render(self)
+        renderer = MazeRender(
+            o_file=self.o_file, entry=self.entry, exit=self.exit
+        )
+        myprintmaze = renderer.render(self, path)
         print(myprintmaze)
-
-
-def main():
-    manager1 = MazeManager(15, 20, seed=123, perfect=False)
-    manager1.generate_maze_dfs()
-
-    bfs = BFS()
-    start = (0, 0)
-    end = (manager1.height - 1, manager1.width - 1)
-    manager1.print_maze()
-
-    path = bfs.shortest_path(
-        maze=manager1.maze,
-        height=manager1.height,
-        width=manager1.width,
-        start=start,
-        end=end,
-    )
-
-    print("BFS path:", path)
-    renderer = MazeRender(entry=start, exit=end)
-    print(renderer.render(manager1, path=path))
 
 
 if __name__ == "__main__":
@@ -385,10 +382,6 @@ if __name__ == "__main__":
 # 42 pattern handled
 # BFS shortest path algorithm works
 # [TO DO]
-# !!! Config → program integration
-# 1.1 Parse WIDTH, HEIGHT, ENTRY, EXIT, OUTPUT_FILE, PERFECT, SEED
-# 1.2 Convert ENTRY/EXIT from x,y to (row,col)
-# 1.3 Remove hard-coded values
 # !!! Output file
 # 2.1 Hex wall encoding
 # 2.2 Write maze grid to OUTPUT_FILE
