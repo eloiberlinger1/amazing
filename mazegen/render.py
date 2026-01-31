@@ -103,15 +103,14 @@ class MazeRender:
                 if cell.west:
                     value |= 8
 
-                print("VALUE :")
-                print(str(value))
-
-                line_str += str(value)
+                # >>> hex(5) -> '0x5'
+                # >>> hex(5)[-1] -> '5'
+                line_str += str(hex(value)[-1])
 
             final_content.append(str(line_str))
 
-        for l in final_content:
-            f.write(l + "\n")
+        for li in final_content:
+            f.write(li + "\n")
 
     def save_maze_file(self) -> None:
 
