@@ -30,8 +30,8 @@ def main():
         maze=mm.maze,
         height=mm.height,
         width=mm.width,
-        start=mm.start,
-        end=mm.end,
+        start=mm.entry,
+        end=mm.exit,
     )
 
     mm.print_maze(path)

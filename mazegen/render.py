@@ -3,7 +3,7 @@ Print the maze
 
 """
 
-from typing import Protocol, Tuple, List, Optional
+from typing import Protocol, Tuple, List
 from .models import MazeCell
 
 
@@ -79,7 +79,7 @@ class MazeRender:
     def render(
         self,
         generated_maze: MazeManagerProtocol,
-        path: Optional[List[Tuple[int, int]]],
+        path: List[Tuple[int, int]],
     ) -> str:
         """
         Docstring for printmaze
@@ -87,7 +87,6 @@ class MazeRender:
         self.maze = generated_maze.maze
         self.height = generated_maze.height
         self.width = generated_maze.width
-        path_set = set(path) if path else set()  #
         self.canevas_h = (self.height * 2) + 1
         self.canevas_w = (self.width * 2) + 1
 
@@ -131,7 +130,7 @@ class MazeRender:
                             content = "E"
 
                         # add shortest path
-                        elif (mr, mc) in path_set:
+                        elif (mr, mc) in path:
                             content = "·"
 
                     line_str += content + " "

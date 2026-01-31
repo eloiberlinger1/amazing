@@ -347,7 +347,7 @@ class MazeManager:
             self.make_imperfect()
         return self.maze
 
-    def print_maze(self, path: Optional[List[Tuple[int, int]]]) -> None:
+    def print_maze(self, path: List[Tuple[int, int]]) -> None:
         """
         Use the render to print the maze
         """
