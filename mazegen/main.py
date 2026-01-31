@@ -2,9 +2,9 @@
 Docstring for mazegen.main
 """
 
-from models import MazeCell
-from typing import Tuple, List, Dict
-from render import MazeRender
+from .models import MazeCell
+from typing import Tuple, List, Dict, Any
+from .render import MazeRender
 import random
 from shortest_path import BFS
 
@@ -12,15 +12,15 @@ from shortest_path import BFS
 class MazeManager:
     """Manages maze generation, storage and display operations"""
 
-    def __init__(
-        self, height: int, width: int, seed: int = None, perfect: bool = True
-    ) -> None:
-        self.height = height
-        self.width = width
-        self.seed = seed
-        self.perfect = perfect
+    def __init__(self, config: dict[str, Any]) -> None:
+        self.height = config["HEIGHT"]
+        self.width = config["WIDTH"]
+        self.seed = config["SEED"]
+        self.perfect = config["PERFECT"]
+        self.entry = config["ENTRY"]
+        self.exit = config["EXIT"]
 
-        self.rng = random.Random(seed)
+        self.rng = random.Random()
 
         # 42 pattern coords (may be empty if maze too small)
         self.pattern_coordinates: List[Tuple[int, int]] = (
@@ -309,7 +309,7 @@ class MazeManager:
         TEmporar function to pirnt the maze
         """
         renderer = MazeRender(
-            entry=(0, 0), exit=(self.height - 1, self.width - 1)
+            entry=self.entry, exit=self.exit
         )
         myprintmaze = renderer.render(self)
         print(myprintmaze)
@@ -338,7 +338,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    exit()
 
 # seed()      → 决定“随机序列长什么样”
 # random()   → 从这个序列里取下一个 0~1 的数
