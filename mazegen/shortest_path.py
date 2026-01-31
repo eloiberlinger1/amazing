@@ -1,6 +1,6 @@
 from collections import deque
 from typing import Deque, Dict, List, Optional, Tuple
-from models import MazeCell
+from .models import MazeCell
 
 
 class BFS:
@@ -11,12 +11,12 @@ class BFS:
     """
 
     def shortest_path(
-      self,
-      maze: List[List[MazeCell]],
-      height: int,
-      width: int,
-      start: Tuple[int, int],
-      end: Tuple[int, int]
+        self,
+        maze: List[List[MazeCell]],
+        height: int,
+        width: int,
+        start: Tuple[int, int],
+        end: Tuple[int, int],
     ) -> Optional[List[Tuple[int, int]]]:
         if height <= 0 or width <= 0:
             return None
@@ -67,7 +67,7 @@ class BFS:
                 directions.append("E")
         return directions
 
-# ----------helpers---------------
+    # ----------helpers---------------
 
     def _in_bounds(self, pos: Tuple[int, int], h: int, w: int) -> bool:
         r, c = pos
@@ -76,7 +76,7 @@ class BFS:
     def _reconstruct_path(
         self,
         parent: Dict[Tuple[int, int], Tuple[int, int] | None],
-        end: Tuple[int, int]
+        end: Tuple[int, int],
     ) -> List[Tuple[int, int]]:
         path: List[Tuple[int, int]] = []
         node: Tuple[int, int] | None = end
@@ -87,35 +87,27 @@ class BFS:
         return path
 
     def _neighbors(
-        self,
-        cur: Tuple[int, int],
-        maze: List[List[MazeCell]],
-        h: int,
-        w: int
+        self, cur: Tuple[int, int], maze: List[List[MazeCell]], h: int, w: int
     ) -> List[Tuple[int, int]]:
         r, c = cur
         cur_cell = maze[r][c]
         neighbors: List[Tuple[int, int]] = []
 
         # if north-side wall open & x north border wall &  x 42 pattern
-        if (
-            cur_cell.north and r > 0 and
-            not maze[r - 1][c].forty_two_pattern
-        ):
+        if cur_cell.north and r > 0 and not maze[r - 1][c].forty_two_pattern:
             neighbors.append((r - 1, c))
         if (
-            cur_cell.south and r < h - 1 and
-            not maze[r + 1][c].forty_two_pattern
+            cur_cell.south
+            and r < h - 1
+            and not maze[r + 1][c].forty_two_pattern
         ):
             neighbors.append((r + 1, c))
-        if (
-            cur_cell.west and c > 0 and
-            not maze[r][c - 1].forty_two_pattern
-        ):
+        if cur_cell.west and c > 0 and not maze[r][c - 1].forty_two_pattern:
             neighbors.append((r, c - 1))
         if (
-            cur_cell.east and c < w - 1 and
-            not maze[r][c + 1].forty_two_pattern
+            cur_cell.east
+            and c < w - 1
+            and not maze[r][c + 1].forty_two_pattern
         ):
             neighbors.append((r, c + 1))
 

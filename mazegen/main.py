@@ -2,11 +2,11 @@
 Docstring for mazegen.main
 """
 
-from .models import MazeCell
-from typing import Tuple, List, Dict, Any
-from .render import MazeRender
 import random
-from shortest_path import BFS
+from typing import Tuple, List, Dict, Any
+from .models import MazeCell
+from .render import MazeRender
+from .shortest_path import BFS
 
 
 class MazeManager:
@@ -308,9 +308,7 @@ class MazeManager:
         """
         TEmporar function to pirnt the maze
         """
-        renderer = MazeRender(
-            entry=self.entry, exit=self.exit
-        )
+        renderer = MazeRender(entry=self.entry, exit=self.exit)
         myprintmaze = renderer.render(self)
         print(myprintmaze)
 
@@ -329,7 +327,7 @@ def main():
         height=manager1.height,
         width=manager1.width,
         start=start,
-        end=end
+        end=end,
     )
 
     print("BFS path:", path)

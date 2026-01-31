@@ -1,6 +1,6 @@
 from .models import MazeCell
 from .render import MazeRender
-from .main import MazeGenerator, MazeManager
+from .main import MazeManager
 from .shortest_path import BFS
 
 __all__ = ["MazeCell", "MazeManager", "MazeRender", "BFS"]
