@@ -3,7 +3,7 @@ Print the maze
 
 """
 
-from typing import Protocol
+from typing import Protocol, Tuple, List, Optional
 from .models import MazeCell
 
 
@@ -79,7 +79,7 @@ class MazeRender:
     def render(
         self,
         generated_maze: MazeManagerProtocol,
-        path=None
+        path: Optional[List[Tuple[int, int]]],
     ) -> str:
         """
         Docstring for printmaze
@@ -121,7 +121,6 @@ class MazeRender:
                     content = " "
                     # Center of element
                     if r % 2 != 0 and c % 2 != 0:
-                        # TO DO: Replace by values from config file
                         mr, mc = (r - 1) // 2, (c - 1) // 2
 
                         # Coords in original mze
@@ -130,6 +129,7 @@ class MazeRender:
 
                         elif (mr, mc) == self.exit:
                             content = "E"
+
                         # add shortest path
                         elif (mr, mc) in path_set:
                             content = "·"

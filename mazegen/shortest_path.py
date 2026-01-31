@@ -45,8 +45,10 @@ class BFS:
         return None
 
     def path_to_directions(self, path: List[Tuple[int, int]]) -> List[str]:
-        """Convert a path of coordinates
-        to a list of directions (N, E, S, W)"""
+        """
+        Convert a path of coordinates
+        to a list of directions (N, E, S, W)
+        """
 
         if len(path) < 2:
             return []

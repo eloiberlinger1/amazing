@@ -3,7 +3,7 @@ Docstring for mazegen.main
 """
 
 import random
-from typing import Tuple, List, Dict, Any
+from typing import Tuple, List, Dict, Any, Optional
 from .models import MazeCell
 from .render import MazeRender
 from .shortest_path import BFS
@@ -28,19 +28,25 @@ class MazeManager:
         entry = config["ENTRY"]
         exit_ = config["EXIT"]
         if not isinstance(height, int) or height <= 0:
-            raise ValueError(f"HEIGHT must be a positive integer, got {height!r}")
+            raise ValueError(
+                f"HEIGHT must be a positive integer, got {height!r}"
+            )
         if not isinstance(width, int) or width <= 0:
-            raise ValueError(f"WIDTH must be a positive integer, got {width!r}")
+            raise ValueError(
+                f"WIDTH must be a positive integer, got {width!r}"
+            )
         if seed is not None and not isinstance(seed, int):
             raise ValueError(f"SEED must be an int or None, got {seed!r}")
         if not isinstance(perfect, bool):
             raise ValueError(f"PERFECT must be a bool, got {perfect!r}")
+
         def _is_coord(value: Any) -> bool:
             return (
                 isinstance(value, tuple)
                 and len(value) == 2
                 and all(isinstance(v, int) for v in value)
             )
+
         if not _is_coord(entry):
             raise ValueError(
                 f"ENTRY must be a tuple of two integers (row, col), got {entry!r}"
@@ -341,35 +347,13 @@ class MazeManager:
             self.make_imperfect()
         return self.maze
 
-    def print_maze(self) -> None:
+    def print_maze(self, path: Optional[List[Tuple[int, int]]]) -> None:
         """
-        TEmporar function to pirnt the maze
+        Use the render to print the maze
         """
         renderer = MazeRender(entry=self.entry, exit=self.exit)
-        myprintmaze = renderer.render(self)
+        myprintmaze = renderer.render(self, path)
         print(myprintmaze)
-
-
-def main():
-    manager1 = MazeManager(15, 20, seed=123, perfect=False)
-    manager1.generate_maze_dfs()
-
-    bfs = BFS()
-    start = (0, 0)
-    end = (manager1.height - 1, manager1.width - 1)
-    manager1.print_maze()
-
-    path = bfs.shortest_path(
-        maze=manager1.maze,
-        height=manager1.height,
-        width=manager1.width,
-        start=start,
-        end=end,
-    )
-
-    print("BFS path:", path)
-    renderer = MazeRender(entry=start, exit=end)
-    print(renderer.render(manager1, path=path))
 
 
 if __name__ == "__main__":
