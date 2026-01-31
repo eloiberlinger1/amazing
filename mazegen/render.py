@@ -20,6 +20,11 @@ class MazeManagerProtocol(Protocol):
 
 class MazeRender:
 
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    RESET = '\033[0m'
+
     WALL_CHARS = {
         (1, 1, 0, 0): "╰",
         (0, 0, 1, 1): "╮",
@@ -39,18 +44,34 @@ class MazeRender:
     }
 
     def __init__(
-        self, o_file: str, entry: tuple[int, int], exit: tuple[int, int]
+        self, o_file: str, entry: tuple[int, int], exit: tuple[int, int], color: str = "Default"
     ):
         """Initialize Maze renderer with entry and exit points"""
         self.entry = entry
         self.exit = exit
-
+        self.color = color
         self.height = 0
         self.width = 0
         self.canevas_h = 0
         self.canevas_w = 0
 
         self.o_file = o_file
+
+    def _get_wall_char(self, key: tuple[int, int, int, int], color: str = "Default") -> str:
+        """
+        Get the wall character for the given key
+        """
+    
+        char = self.WALL_CHARS.get(key, "┼")
+
+        if color == "Red":
+            return self.RED + char + self.RESET
+        elif color == "Green":
+            return self.GREEN + char + self.RESET
+        elif color == "Yellow":
+            return self.YELLOW + char + self.RESET
+        return char
+
 
     def _get_canevas(self, h: int, w: int) -> list[list[bool]]:
         """
@@ -172,10 +193,6 @@ class MazeRender:
             generated_maze.height, generated_maze.width
         )
 
-        # ====================
-        #    Integer char
-        # ====================
-
         c_h = self.canevas_h
         c_w = self.canevas_w
         res = ""
@@ -190,8 +207,8 @@ class MazeRender:
                     w = c > 0 and canevas[r][c - 1]
                     e = c < c_w - 1 and canevas[r][c + 1]
 
-                    char = self.WALL_CHARS.get(
-                        (int(n), int(e), int(s), int(w)), "┼"
+                    char = self._get_wall_char(
+                        (int(n), int(e), int(s), int(w)), self.color
                     )
                     line_str += char + ("─" if e else " ")
                 else:

@@ -74,6 +74,7 @@ class MazeManager:
         self.perfect: bool = perfect
         self.entry: Tuple[int, int] = entry
         self.exit: Tuple[int, int] = exit_
+        self.color: str = config["COLOR"]
 
         self.rng = random.Random()
 
@@ -366,7 +367,7 @@ class MazeManager:
         Use the render to print the maze
         """
         renderer = MazeRender(
-            o_file=self.o_file, entry=self.entry, exit=self.exit
+            o_file=self.o_file, entry=self.entry, exit=self.exit, color=self.color
         )
         myprintmaze = renderer.render(self, path)
         print(myprintmaze)

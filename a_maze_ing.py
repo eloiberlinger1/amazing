@@ -3,11 +3,11 @@
 Docstring pour a_maze_ing
 """
 
-from config_loader import get_config
 import sys
 import os
 import termios
 import tty
+from config_loader import get_config
 from mazegen import MazeManager, BFS
 
 
@@ -53,10 +53,10 @@ def print_banner():
     print("\n\n\n\n")
 
 
-def print_menu(show_path: bool, color_mode: str):
+def print_menu(show_path: bool, color: str):
     """Print the interactive menu as an ASCII table"""
     path_status = "ON" if show_path else "OFF"
-    color_status = color_mode
+    color_status = color
 
     menu = f"""
                     A-MAZE-ING MENU
@@ -64,7 +64,7 @@ def print_menu(show_path: bool, color_mode: str):
   [1] Generate maze
   [2] Show / Hide shortest path  [{path_status}]
   [3] Change colors
-      └─ Current mode: {color_status}
+      └─ Current: {color_status}
   [Q] Quit
 ----------------------------------------------------------
 
@@ -78,8 +78,9 @@ def print_color_submenu():
                     COLOR SELECTION MENU
 ----------------------------------------------------------
   [1] Default (no colors)
-  [2] Color maze walls
-  [3] Color only 42 pattern
+  [2] Red
+  [3] Green
+  [4] Yellow
   [B] Back to main menu
 ----------------------------------------------------------
 
@@ -129,19 +130,20 @@ def main():
         exit()
 
     config = get_config(config_file)
+    config["COLOR"] = "Default"
+
 
     mm = MazeManager(config)
     mm.generate_maze_dfs()
     path = calculate_path(mm)
 
     show_path = True
-    color_mode = "Default"
 
     while True:
         clear_screen()
         print_banner()
         display_maze(mm, path, show_path)
-        print_menu(show_path, color_mode)
+        print_menu(show_path, config["COLOR"])
 
         choice = get_input().upper()
 
@@ -156,6 +158,8 @@ def main():
             show_path = not show_path
 
         elif choice == "3":
+            color_map = {"1": "Default", "2": "Red", "3": "Green", "4": "Yellow"}
+
             while True:
                 clear_screen()
                 print_banner()
@@ -164,16 +168,11 @@ def main():
 
                 color_choice = get_input().upper()
 
-                if color_choice == "1":
-                    color_mode = "Default"
+                if color_choice == "B":
                     break
-                elif color_choice == "2":
-                    color_mode = "Maze walls"
-                    break
-                elif color_choice == "3":
-                    color_mode = "42 pattern only"
-                    break
-                elif color_choice == "B":
+
+                if color_choice in color_map:
+                    config["COLOR"] = color_map[color_choice]
                     break
 
         elif choice == "Q" or choice == "\x1b":  # \x1b = ESC
