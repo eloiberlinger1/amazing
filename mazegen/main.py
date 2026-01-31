@@ -6,6 +6,7 @@ from .models import MazeCell
 from typing import Tuple, List, Dict, Any
 from .render import MazeRender
 import random
+from shortest_path import BFS
 
 
 class MazeManager:
@@ -44,29 +45,29 @@ class MazeManager:
         """
 
         coords: List[Tuple[int, int]] = []
-        upper_left = (int((self.height - 5) / 2)), int((self.width - 7) / 2)
+        r, c = (int((self.height - 5) / 2)), int((self.width - 7) / 2)
 
         # "4" part
-        coords.append(upper_left)
-        coords.append((upper_left[0] + 1, upper_left[1]))
-        coords.append((upper_left[0] + 2, upper_left[1]))
-        coords.append((upper_left[0] + 2, upper_left[1] + 1))
-        coords.append((upper_left[0] + 2, upper_left[1] + 2))
-        coords.append((upper_left[0] + 3, upper_left[1] + 2))
-        coords.append((upper_left[0] + 4, upper_left[1] + 2))
+        coords.append((r, c))
+        coords.append((r + 1, c))
+        coords.append((r + 2, c))
+        coords.append((r + 2, c + 1))
+        coords.append((r + 2, c + 2))
+        coords.append((r + 3, c + 2))
+        coords.append((r + 4, c + 2))
 
         # "2" part
-        coords.append((upper_left[0], upper_left[1] + 4))
-        coords.append((upper_left[0] + 2, upper_left[1] + 4))
-        coords.append((upper_left[0] + 3, upper_left[1] + 4))
-        coords.append((upper_left[0] + 4, upper_left[1] + 4))
-        coords.append((upper_left[0], upper_left[1] + 5))
-        coords.append((upper_left[0] + 2, upper_left[1] + 5))
-        coords.append((upper_left[0] + 4, upper_left[1] + 5))
-        coords.append((upper_left[0], upper_left[1] + 6))
-        coords.append((upper_left[0] + 1, upper_left[1] + 6))
-        coords.append((upper_left[0] + 2, upper_left[1] + 6))
-        coords.append((upper_left[0] + 4, upper_left[1] + 6))
+        coords.append((r, c + 4))
+        coords.append((r + 2, c + 4))
+        coords.append((r + 3, c + 4))
+        coords.append((r + 4, c + 4))
+        coords.append((r, c + 5))
+        coords.append((r + 2, c + 5))
+        coords.append((r + 4, c + 5))
+        coords.append((r, c + 6))
+        coords.append((r + 1, c + 6))
+        coords.append((r + 2, c + 6))
+        coords.append((r + 4, c + 6))
 
         return coords
 
@@ -147,10 +148,11 @@ class MazeManager:
             to MazeCell objects that are unvisited neighbors
         """
         ava_neighbors: Dict[str, MazeCell] = {}
-        north = (current_cell.coordinates[0] - 1, current_cell.coordinates[1])
-        south = (current_cell.coordinates[0] + 1, current_cell.coordinates[1])
-        east = (current_cell.coordinates[0], current_cell.coordinates[1] + 1)
-        west = (current_cell.coordinates[0], current_cell.coordinates[1] - 1)
+        r, c = current_cell.coordinates
+        north = (r - 1, c)
+        south = (r + 1, c)
+        east = (r, c + 1)
+        west = (r, c - 1)
 
         if north in available:
             ava_neighbors["north"] = self.get_maze_cell_from_coordinate(north)
@@ -313,30 +315,49 @@ class MazeManager:
         print(myprintmaze)
 
 
+def main():
+    manager1 = MazeManager(15, 20, seed=123, perfect=False)
+    manager1.generate_maze_dfs()
+
+    bfs = BFS()
+    start = (0, 0)
+    end = (manager1.height - 1, manager1.width - 1)
+    manager1.print_maze()
+
+    path = bfs.shortest_path(
+        maze=manager1.maze,
+        height=manager1.height,
+        width=manager1.width,
+        start=start,
+        end=end
+    )
+
+    print("BFS path:", path)
+    renderer = MazeRender(entry=start, exit=end)
+    print(renderer.render(manager1, path=path))
+
+
 if __name__ == "__main__":
     exit()
 
 # seed()      → 决定“随机序列长什么样”
 # random()   → 从这个序列里取下一个 0~1 的数
-#
-# Maze Project – Implementation Checklist
-# ✅ Completed
-# Random maze generation using DFS
-# Seed-based reproducibility (random.Random(seed))
-# Each cell has 4 directional walls (N / E / S / W)
-# Wall consistency between neighboring cells (no mismatches)
-# Full connectivity for all non-“42” cells
-# “42” pattern implemented as fully closed, isolated cells
-# External maze borders remain closed
-# PERFECT = true generates a loop-free (tree) maze
-# PERFECT = false allows controlled loops (imperfect maze)
-#
-# ❌ Not Implemented Yet
-# Explicit maze entry and exit cells
-# Opening external walls for entry / exit
-# Enforcing “exactly one path between entry and exit” (semantic level)
-# Validation to prevent large open areas (e.g. 3×3 open blocks)
-#
-# ℹ️ Notes
-# DFS start cell is internal only and is not the maze entry
-# Maze is structurally valid but currently fully enclosed
+
+# Status Summary (Submission Notes)
+# [DONE]
+# DFS maze generation (seeded, PERFECT / imperfect)
+# Wall consistency (N / E / S / W)
+# 42 pattern handled
+# BFS shortest path algorithm works
+# [TO DO]
+# !!! Config → program integration
+# 1.1 Parse WIDTH, HEIGHT, ENTRY, EXIT, OUTPUT_FILE, PERFECT, SEED
+# 1.2 Convert ENTRY/EXIT from x,y to (row,col)
+# 1.3 Remove hard-coded values
+# !!! Output file
+# 2.1 Hex wall encoding
+# 2.2 Write maze grid to OUTPUT_FILE
+# 2.3 Append ENTRY, EXIT, shortest path (N/E/S/W)
+# !!! 3×3 open area rule
+# 3.1 Detect 3×3 open areas
+# 3.2 Regenerate maze if invalid
