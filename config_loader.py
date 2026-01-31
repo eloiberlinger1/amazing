@@ -25,9 +25,11 @@ def check_values(c: dict[str, Any]) -> dict[str, Any]:
     ):
         raise BaseException(
             f"Entry or exit must be IN the maze dimensions. "
-            f"Maze size: {c['HEIGHT']} rows × {c['WIDTH']} cols (valid: rows 0-{c['HEIGHT']-1}, cols 0-{c['WIDTH']-1}). "
+            f"Maze size: {c['HEIGHT']} rows × {c['WIDTH']}"
+            " cols (valid: rows 0-"
+            f"{c['HEIGHT']-1}, cols 0-{c['WIDTH']-1}). "
             f"ENTRY={c['ENTRY']}, EXIT={c['EXIT']}. "
-    )    
+        )
     elif (
         c["ENTRY"][0] < 0
         or c["ENTRY"][1] < 0
@@ -79,9 +81,9 @@ def get_config(file_path: str) -> dict[str, str]:
             for li in f:
                 li = li.strip()
                 if "=" in li:
-                    li = li.split("=", 1)
-                    key = li[0]
-                    config_data[key] = li[1]
+                    li_c = li.split("=", 1)
+                    key = li_c[0]
+                    config_data[key] = li_c[1]
     except Exception:
         print("File not found")
 

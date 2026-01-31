@@ -74,7 +74,7 @@ Press a key: """
 
 def print_color_submenu():
     """Print the color selection submenu"""
-    menu = f"""
+    menu = """
                     COLOR SELECTION MENU
 ----------------------------------------------------------
   [1] Default (no colors)
@@ -129,27 +129,27 @@ def main():
         exit()
 
     config = get_config(config_file)
-    
+
     # Initialize maze
     mm = MazeManager(config)
     mm.generate_maze_dfs()
-    
+
     # Calculate initial path
     path = calculate_path(mm)
-    
+
     # State variables
     show_path = True
     color_mode = "Default"
-    
+
     # Main menu loop
     while True:
         clear_screen()
         print_banner()
         display_maze(mm, path, show_path)
         print_menu(show_path, color_mode)
-        
+
         choice = get_input().upper()
-        
+
         if choice == "1":
             # Generate new maze
             mm = generate_maze(config)
@@ -157,11 +157,11 @@ def main():
             clear_screen()
             print_banner()
             display_maze(mm, path, show_path)
-        
+
         elif choice == "2":
             # Toggle path visibility
             show_path = not show_path
-        
+
         elif choice == "3":
             # Color selection submenu
             while True:
@@ -169,9 +169,9 @@ def main():
                 print_banner()
                 display_maze(mm, path, show_path)
                 print_color_submenu()
-                
+
                 color_choice = get_input().upper()
-                
+
                 if color_choice == "1":
                     color_mode = "Default"
                     break
@@ -183,7 +183,7 @@ def main():
                     break
                 elif color_choice == "B":
                     break
-        
+
         elif choice == "Q" or choice == "\x1b":  # Q or ESC
             clear_screen()
             print("\nGoodbye!\n")

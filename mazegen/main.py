@@ -25,7 +25,8 @@ class MazeManager:
         missing_keys = [key for key in required_keys if key not in config]
         if missing_keys:
             raise ValueError(
-                f"Missing required configuration keys for MazeManager: {', '.join(missing_keys)}"
+                "Missing required configuration keys for MazeManager: "
+                f"{', '.join(missing_keys)}"
             )
         # Basic type and value validation
         o_file = config["OUTPUT_FILE"]
@@ -57,11 +58,13 @@ class MazeManager:
 
         if not _is_coord(entry):
             raise ValueError(
-                f"ENTRY must be a tuple of two integers (row, col), got {entry!r}"
+                "ENTRY must be a tuple of two integers (row, col), got "
+                f"{entry!r}"
             )
         if not _is_coord(exit_):
             raise ValueError(
-                f"EXIT must be a tuple of two integers (row, col), got {exit_!r}"
+                "EXIT must be a tuple of two integers (row, col), got "
+                f"{exit_!r}"
             )
         # Assign validated configuration
         self.height: int = height
