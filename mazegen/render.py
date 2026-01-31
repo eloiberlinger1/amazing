@@ -128,10 +128,7 @@ class MazeRender:
                         if (mr, mc) == self.entry:
                             content = "S"
 
-                        elif (mr, mc) == (
-                            self.exit[0],
-                            self.exit[1],
-                        ):
+                        elif (mr, mc) == self.exit:
                             content = "E"
                         # add shortest path
                         elif (mr, mc) in path_set:

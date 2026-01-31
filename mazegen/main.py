@@ -13,12 +13,49 @@ class MazeManager:
     """Manages maze generation, storage and display operations"""
 
     def __init__(self, config: dict[str, Any]) -> None:
-        self.height = config["HEIGHT"]
-        self.width = config["WIDTH"]
-        self.seed = config["SEED"]
-        self.perfect = config["PERFECT"]
-        self.entry = config["ENTRY"]
-        self.exit = config["EXIT"]
+        # Validate required configuration keys
+        required_keys = ("HEIGHT", "WIDTH", "SEED", "PERFECT", "ENTRY", "EXIT")
+        missing_keys = [key for key in required_keys if key not in config]
+        if missing_keys:
+            raise ValueError(
+                f"Missing required configuration keys for MazeManager: {', '.join(missing_keys)}"
+            )
+        # Basic type and value validation
+        height = config["HEIGHT"]
+        width = config["WIDTH"]
+        seed = config["SEED"]
+        perfect = config["PERFECT"]
+        entry = config["ENTRY"]
+        exit_ = config["EXIT"]
+        if not isinstance(height, int) or height <= 0:
+            raise ValueError(f"HEIGHT must be a positive integer, got {height!r}")
+        if not isinstance(width, int) or width <= 0:
+            raise ValueError(f"WIDTH must be a positive integer, got {width!r}")
+        if seed is not None and not isinstance(seed, int):
+            raise ValueError(f"SEED must be an int or None, got {seed!r}")
+        if not isinstance(perfect, bool):
+            raise ValueError(f"PERFECT must be a bool, got {perfect!r}")
+        def _is_coord(value: Any) -> bool:
+            return (
+                isinstance(value, tuple)
+                and len(value) == 2
+                and all(isinstance(v, int) for v in value)
+            )
+        if not _is_coord(entry):
+            raise ValueError(
+                f"ENTRY must be a tuple of two integers (row, col), got {entry!r}"
+            )
+        if not _is_coord(exit_):
+            raise ValueError(
+                f"EXIT must be a tuple of two integers (row, col), got {exit_!r}"
+            )
+        # Assign validated configuration
+        self.height = height
+        self.width = width
+        self.seed = seed
+        self.perfect = perfect
+        self.entry = entry
+        self.exit = exit_
 
         self.rng = random.Random()
 
