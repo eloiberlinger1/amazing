@@ -107,7 +107,7 @@ def calculate_path(mm: MazeManager):
     return path
 
 
-def display_maze(mm: MazeManager, path: list = None, show_path: bool = True):
+def display_maze(mm: MazeManager, path: list = [None], show_path: bool = True):
     """Display the maze with optional path"""
     if path is None:
         path = []
@@ -130,18 +130,13 @@ def main():
 
     config = get_config(config_file)
 
-    # Initialize maze
     mm = MazeManager(config)
     mm.generate_maze_dfs()
-
-    # Calculate initial path
     path = calculate_path(mm)
 
-    # State variables
     show_path = True
     color_mode = "Default"
 
-    # Main menu loop
     while True:
         clear_screen()
         print_banner()
@@ -151,7 +146,6 @@ def main():
         choice = get_input().upper()
 
         if choice == "1":
-            # Generate new maze
             mm = generate_maze(config)
             path = calculate_path(mm)
             clear_screen()
@@ -159,11 +153,9 @@ def main():
             display_maze(mm, path, show_path)
 
         elif choice == "2":
-            # Toggle path visibility
             show_path = not show_path
 
         elif choice == "3":
-            # Color selection submenu
             while True:
                 clear_screen()
                 print_banner()
@@ -184,7 +176,7 @@ def main():
                 elif color_choice == "B":
                     break
 
-        elif choice == "Q" or choice == "\x1b":  # Q or ESC
+        elif choice == "Q" or choice == "\x1b":  # \x1b = ESC
             clear_screen()
             print("\nGoodbye!\n")
             break
