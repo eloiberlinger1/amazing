@@ -20,10 +20,13 @@ class MazeManagerProtocol(Protocol):
 
 class MazeRender:
 
-    RED = '\033[31m'
-    GREEN = '\033[32m'
-    YELLOW = '\033[33m'
-    RESET = '\033[0m'
+    COLORS = {
+        "Default": "",
+        "Red": "\033[31m",
+        "Green": "\033[32m",
+        "Yellow": "\033[33m",
+        "RESET": "\033[0m",
+    }
 
     WALL_CHARS = {
         (1, 1, 0, 0): "╰",
@@ -41,37 +44,25 @@ class MazeRender:
         (0, 1, 1, 1): "┬",
         (1, 1, 1, 0): "├",
         (1, 1, 1, 1): "┼",
+        (0, 0, 0, 0): "│",
     }
 
     def __init__(
-        self, o_file: str, entry: tuple[int, int], exit: tuple[int, int], color: str = "Default"
+        self,
+        o_file: str,
+        entry: tuple[int, int],
+        exit: tuple[int, int],
+        color: str = "Default",
     ):
         """Initialize Maze renderer with entry and exit points"""
         self.entry = entry
         self.exit = exit
-        self.color = color
         self.height = 0
         self.width = 0
         self.canevas_h = 0
         self.canevas_w = 0
-
+        self.color = color
         self.o_file = o_file
-
-    def _get_wall_char(self, key: tuple[int, int, int, int], color: str = "Default") -> str:
-        """
-        Get the wall character for the given key
-        """
-    
-        char = self.WALL_CHARS.get(key, "┼")
-
-        if color == "Red":
-            return self.RED + char + self.RESET
-        elif color == "Green":
-            return self.GREEN + char + self.RESET
-        elif color == "Yellow":
-            return self.YELLOW + char + self.RESET
-        return char
-
 
     def _get_canevas(self, h: int, w: int) -> list[list[bool]]:
         """
@@ -198,7 +189,7 @@ class MazeRender:
         res = ""
 
         for r in range(c_h):
-            line_str = ""
+            line_str = self.COLORS[self.color] + ""
             for c in range(c_w):
 
                 if canevas[r][c]:
@@ -207,8 +198,8 @@ class MazeRender:
                     w = c > 0 and canevas[r][c - 1]
                     e = c < c_w - 1 and canevas[r][c + 1]
 
-                    char = self._get_wall_char(
-                        (int(n), int(e), int(s), int(w)), self.color
+                    char = self.WALL_CHARS.get(
+                        (int(n), int(e), int(s), int(w)), "┼"
                     )
                     line_str += char + ("─" if e else " ")
                 else:
@@ -229,7 +220,7 @@ class MazeRender:
                             content = "·"
 
                     line_str += content + " "
-            res += line_str + "\n"
+            res += line_str + "\n" + self.COLORS["RESET"]
 
         self.save_maze_file(path)
 
