@@ -129,6 +129,8 @@ def main():
 
     config = get_config(config_file)
     config["COLOR"] = "Default"
+    if config.get("SEED") is None:
+        config["SEED"] = None
 
     mm = MazeManager(config)
     mm.generate_maze_dfs()

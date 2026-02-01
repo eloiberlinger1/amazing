@@ -93,7 +93,7 @@ class MazeRender:
 
         return canevas
 
-    def _write_maze_file(self, f: TextIO):
+    def _write_maze_file(self, f: TextIO) -> None:
         """
         Docstring for _write_maze_file
 
@@ -130,7 +130,7 @@ class MazeRender:
         for li in final_content:
             f.write(li + "\n")
 
-    def _write_se(self, f: TextIO):
+    def _write_se(self, f: TextIO) -> None:
         """
         Docstring for _write_se
 
@@ -146,9 +146,9 @@ class MazeRender:
         for li in final_content:
             f.write(li + "\n")
 
-    def _write_path(self, f, path: List[Tuple[int, int]]) -> None:
+    def _write_path(self, f: TextIO, path: List[Tuple[int, int]]) -> None:
         """
-        Docstring for _write_path
+        Writes the path to solve the maze in the output file
         """
         directions = path_to_directions(path)
         for c in directions:

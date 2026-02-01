@@ -76,7 +76,7 @@ class MazeManager:
         self.exit: Tuple[int, int] = exit_
         self.color: str = config["COLOR"]
 
-        self.rng = random.Random()
+        self.rng = random.Random(seed)
 
         # 42 pattern coords (may be empty if maze too small)
         self.pattern_coordinates: List[Tuple[int, int]] = (

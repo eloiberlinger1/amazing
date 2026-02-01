@@ -79,6 +79,8 @@ def get_config(file_path: str) -> dict[str, str]:
     try:
         with open(file_path, "r") as f:
             for li in f:
+                if li[0] == "#":
+                    continue
                 li = li.strip()
                 if "=" in li:
                     li_c = li.split("=", 1)
