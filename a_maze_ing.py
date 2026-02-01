@@ -181,6 +181,7 @@ def main() -> None:
                     break
 
                 if color_choice in color_map:
+                    config["COLOR"] = color_map[color_choice]
                     mm.color = color_map[color_choice]
                     clear_screen()
                     print_banner()
