@@ -142,7 +142,9 @@ class MazeRender:
         for li in final_content:
             f.write(li + "\n")
 
-    def _write_path(self, f: TextIO, path: Optional[List[Tuple[int, int]]]) -> None:
+    def _write_path(
+        self, f: TextIO, path: Optional[List[Tuple[int, int]]]
+    ) -> None:
         """
         Write the path to solve the maze in the output file
         """

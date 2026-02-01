@@ -25,11 +25,11 @@ run: install
 	@if [ -z "$(ARGS)" ]; then echo "Error: No config file | make run <ex: config.txt>"; exit 1; fi
 	$(VENV_PYTHON) $(MAIN) $(ARGS)
 
-lint:
+lint: clean
 	$(PYTHON) -m flake8 ./
 	$(PYTHON) -m mypy --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs .
 
-lint-strict:
+lint-strict: clean
 	mypy . --strict
 	flake8 .
 
