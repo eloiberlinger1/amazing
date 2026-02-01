@@ -3,7 +3,7 @@ Print the maze
 
 """
 
-from typing import TextIO, Protocol, Tuple, List
+from typing import TextIO, Protocol, Tuple, List, Optional
 from .models import MazeCell
 from .shortest_path import path_to_directions
 
@@ -142,15 +142,17 @@ class MazeRender:
         for li in final_content:
             f.write(li + "\n")
 
-    def _write_path(self, f: TextIO, path: List[Tuple[int, int]]) -> None:
+    def _write_path(self, f: TextIO, path: Optional[List[Tuple[int, int]]]) -> None:
         """
         Write the path to solve the maze in the output file
         """
+        if path is None:
+            path = []
         directions = path_to_directions(path)
         for c in directions:
             f.write(c)
 
-    def save_maze_file(self, path: List[Tuple[int, int]]) -> None:
+    def save_maze_file(self, path: Optional[List[Tuple[int, int]]]) -> None:
         """
         Handles the Maze output file
         """

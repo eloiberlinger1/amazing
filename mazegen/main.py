@@ -392,11 +392,12 @@ if __name__ == "__main__":
 # Wall consistency (N / E / S / W)
 # 42 pattern handled
 # BFS shortest path algorithm works
-# [TO DO]
 # !!! Output file
 # 2.1 Hex wall encoding
 # 2.2 Write maze grid to OUTPUT_FILE
 # 2.3 Append ENTRY, EXIT, shortest path (N/E/S/W)
+
+# [TO DO]
 # !!! 3×3 open area rule
 # 3.1 Detect 3×3 open areas
 # 3.2 Regenerate maze if invalid
