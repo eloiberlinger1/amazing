@@ -30,7 +30,7 @@ def clear_screen():
 
 def print_banner():
     """Print the ASCII banner"""
-    print("\n\n\n\n\n")
+    print()
     print(
         (
             "   ░███         ░███     ░███    ░███    ░█████████ "
@@ -132,7 +132,6 @@ def main():
     config = get_config(config_file)
     config["COLOR"] = "Default"
 
-
     mm = MazeManager(config)
     mm.generate_maze_dfs()
     path = calculate_path(mm)
@@ -158,7 +157,12 @@ def main():
             show_path = not show_path
 
         elif choice == "3":
-            color_map = {"1": "Default", "2": "Red", "3": "Green", "4": "Yellow"}
+            color_map = {
+                "1": "Default",
+                "2": "Red",
+                "3": "Green",
+                "4": "Yellow",
+            }
 
             while True:
                 clear_screen()

@@ -367,7 +367,10 @@ class MazeManager:
         Use the render to print the maze
         """
         renderer = MazeRender(
-            o_file=self.o_file, entry=self.entry, exit=self.exit, color=self.color
+            o_file=self.o_file,
+            entry=self.entry,
+            exit=self.exit,
+            color=self.color,
         )
         myprintmaze = renderer.render(self, path)
         print(myprintmaze)
