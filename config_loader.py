@@ -14,16 +14,16 @@ def check_values(c: dict[str, Any]) -> dict[str, Any]:
     (c => config_data)
     """
     if c["HEIGHT"] <= 0:
-        raise BaseException("Height value needs to be at least 1")
+        raise TypeError("Height value needs to be at least 1")
     elif c["WIDTH"] <= 0:
-        raise BaseException("Width value needs to be at least 1")
+        raise TypeError("Width value needs to be at least 1")
     elif (
         c["ENTRY"][0] >= c["HEIGHT"]
         or c["ENTRY"][1] >= c["WIDTH"]
         or c["EXIT"][0] >= c["HEIGHT"]
         or c["EXIT"][1] >= c["WIDTH"]
     ):
-        raise BaseException(
+        raise TypeError(
             f"Entry or exit must be IN the maze dimensions. "
             f"Maze size: {c['HEIGHT']} rows × {c['WIDTH']}"
             " cols (valid: rows 0-"
@@ -36,9 +36,9 @@ def check_values(c: dict[str, Any]) -> dict[str, Any]:
         or c["EXIT"][0] < 0
         or c["EXIT"][1] < 0
     ):
-        raise BaseException("Entry / exit must have positive values Really..?")
+        raise TypeError("Entry / exit must have positive values Really..?")
     elif c["ENTRY"] == c["EXIT"]:
-        raise BaseException("Entry and exit can not be same. Are you stupid ?")
+        raise TypeError("Entry and exit can not be same. Are you stupid ?")
 
     return c
 
@@ -49,22 +49,22 @@ def apply_types(config_data: dict[str, Any]) -> dict[str, Any]:
     """
 
     # string_exected_keys = ["OUTPUT_FILE"]
-    int_exected_keys = ["WIDTH", "HEIGHT", "SEED"]
-    tuple_exected_keys = ["ENTRY", "EXIT"]
-    bool_exected_keys = ["PERFECT"]
+    int_expected_keys = ["WIDTH", "HEIGHT", "SEED"]
+    tuple_expected_keys = ["ENTRY", "EXIT"]
+    bool_expected_keys = ["PERFECT"]
 
     for c, v in config_data.items():
 
-        if c in int_exected_keys:
+        if c in int_expected_keys:
             config_data[c] = int(v)
 
-        elif c in tuple_exected_keys:
+        elif c in tuple_expected_keys:
             v = v.split(",")
-            col = int(v[0].strip())
-            row = int(v[1].strip())
+            row = int(v[0].strip())
+            col = int(v[1].strip())
             config_data[c] = (row, col)
 
-        elif c in bool_exected_keys:
+        elif c in bool_expected_keys:
             # Convert string to proper boolean
             config_data[c] = v.strip().lower() in ("true", "1", "yes", "on")
 

@@ -93,7 +93,7 @@ class MazeManager:
         )
 
     def check_42_pattern_availability(self) -> bool:
-        if int(self.width) >= 14 and int(self.height) >= 10:
+        if self.width >= 14 and self.height >= 10:
             return True
         print("The maze size too small, 42 pattern omitted!")
         return False
@@ -138,7 +138,7 @@ class MazeManager:
         for i in range(self.height):
             row = []
             for j in range(self.width):
-                if tuple([i, j]) in self.pattern_coordinates:
+                if (i, j) in self.pattern_coordinates:
                     row.append(
                         MazeCell(
                             False,

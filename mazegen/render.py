@@ -66,7 +66,7 @@ class MazeRender:
 
     def _get_canevas(self, h: int, w: int) -> list[list[bool]]:
         """
-        Docstring for _get_canva
+        Get the canevas
         """
         c_h = self.canevas_h
         c_w = self.canevas_w
@@ -95,8 +95,6 @@ class MazeRender:
 
     def _write_maze_file(self, f: TextIO) -> None:
         """
-        Docstring for _write_maze_file
-
         Write the maze cells values in HEX format
         """
 
@@ -132,8 +130,6 @@ class MazeRender:
 
     def _write_se(self, f: TextIO) -> None:
         """
-        Docstring for _write_se
-
         Write the enty and exit coordinates on the output file
         """
 
@@ -148,7 +144,7 @@ class MazeRender:
 
     def _write_path(self, f: TextIO, path: List[Tuple[int, int]]) -> None:
         """
-        Writes the path to solve the maze in the output file
+        Write the path to solve the maze in the output file
         """
         directions = path_to_directions(path)
         for c in directions:
@@ -156,8 +152,6 @@ class MazeRender:
 
     def save_maze_file(self, path: List[Tuple[int, int]]) -> None:
         """
-        Docstring for save_maze_file
-
         Handles the Maze output file
         """
 
@@ -172,7 +166,7 @@ class MazeRender:
         path: List[Tuple[int, int]],
     ) -> str:
         """
-        Docstring for printmaze
+        Print the maze
         """
         self.maze = generated_maze.maze
         self.height = generated_maze.height
@@ -208,7 +202,7 @@ class MazeRender:
                     if r % 2 != 0 and c % 2 != 0:
                         mr, mc = (r - 1) // 2, (c - 1) // 2
 
-                        # Coords in original mze
+                        # Coords in original maze
                         if (mr, mc) == self.entry:
                             content = "S"
 
