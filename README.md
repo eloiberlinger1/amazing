@@ -308,9 +308,8 @@ AI was used for:
 - **eberling**:
   - Interactive menu and user input management
   - Config file loading and validation
-  - Color integration and display customization    - Maze rendering system and display
-
-
+  - Color integration and display customization
+  - Maze rendering system and display
 ### Project planning
 
 1. **Phase 1 - Base structure**:
