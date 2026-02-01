@@ -93,7 +93,7 @@ class MazeManager:
         )
 
     def check_42_pattern_availability(self) -> bool:
-        if int(self.width) >= 14 and int(self.height) >= 10:
+        if self.width >= 14 and self.height >= 10:
             return True
         print("The maze size too small, 42 pattern omitted!")
         return False
@@ -138,7 +138,7 @@ class MazeManager:
         for i in range(self.height):
             row = []
             for j in range(self.width):
-                if tuple([i, j]) in self.pattern_coordinates:
+                if (i, j) in self.pattern_coordinates:
                     row.append(
                         MazeCell(
                             False,
@@ -392,11 +392,12 @@ if __name__ == "__main__":
 # Wall consistency (N / E / S / W)
 # 42 pattern handled
 # BFS shortest path algorithm works
-# [TO DO]
 # !!! Output file
 # 2.1 Hex wall encoding
 # 2.2 Write maze grid to OUTPUT_FILE
 # 2.3 Append ENTRY, EXIT, shortest path (N/E/S/W)
+
+# [TO DO]
 # !!! 3×3 open area rule
 # 3.1 Detect 3×3 open areas
 # 3.2 Regenerate maze if invalid

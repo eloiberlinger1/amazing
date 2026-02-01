@@ -122,7 +122,7 @@ def display_maze(
 
 def main() -> None:
     """
-    Main entrypoint of the programm
+    Main entrypoint of the program
     """
     print_banner()
 
