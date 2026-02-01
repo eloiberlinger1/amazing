@@ -130,7 +130,7 @@ class MazeRender:
 
     def _write_se(self, f: TextIO) -> None:
         """
-        Write the enty and exit coordinates on the output file
+        Write the entry and exit coordinates on the output file
         """
 
         final_content: List[str] = []
