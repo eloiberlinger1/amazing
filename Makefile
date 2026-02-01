@@ -6,7 +6,7 @@ VENV_PIP = $(VENV)/bin/pip
 
 ARGS := $(wordlist 2, 999, $(MAKECMDGOALS))
 
-.PHONY: all run install lint debug clean
+.PHONY: all run install lint debug clean re
 
 all:
 	@echo "Usage: make run <config_file>"
@@ -22,7 +22,7 @@ $(VENV)/bin/activate: requirements.txt
 	@touch $(VENV)/bin/activate
 
 run: install
-	@if [ -z "$(ARGS)" ]; then echo "Error: No config file"; exit 1; fi
+	@if [ -z "$(ARGS)" ]; then echo "Error: No config file | make run <ex: config.txt>"; exit 1; fi
 	$(VENV_PYTHON) $(MAIN) $(ARGS)
 
 lint: install
@@ -37,6 +37,8 @@ clean:
 	rm -rf */__pycache__
 	rm -rf .mypy_cache
 	rm -rf $(VENV)
+
+re: clean install
 
 # Catch-all
 %:

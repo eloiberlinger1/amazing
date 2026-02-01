@@ -84,8 +84,9 @@ def get_config(file_path: str) -> dict[str, str]:
                     li_c = li.split("=", 1)
                     key = li_c[0]
                     config_data[key] = li_c[1]
-    except Exception:
-        print("File not found")
+    except Exception as e:
+        print(f"File not found {e}")
+        exit()
 
     apply_types(config_data)
     try:
