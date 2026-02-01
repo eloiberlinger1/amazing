@@ -31,7 +31,7 @@ def path_to_directions(path: List[Tuple[int, int]]) -> List[str]:
 
 class BFS:
     """
-    Breadtg-First Search
+    Breadth-First Search
     There may be multiple shortest paths,
     but BFS returns the first one discovered according to the FIFO principle.
     """

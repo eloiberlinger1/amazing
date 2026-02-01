@@ -21,7 +21,9 @@ class MazeManager:
             "PERFECT",
             "ENTRY",
             "EXIT",
+            "COLOR",
         )
+
         missing_keys = [key for key in required_keys if key not in config]
         if missing_keys:
             raise ValueError(

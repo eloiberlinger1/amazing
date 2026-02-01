@@ -26,6 +26,3 @@ python3 a_maze_ing.py <config_file>
 ## Authors
 
 by wehan and eberling
-
-
-
