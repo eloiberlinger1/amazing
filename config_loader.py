@@ -71,7 +71,7 @@ def apply_types(config_data: dict[str, Any]) -> dict[str, Any]:
     return config_data
 
 
-def get_config(file_path: str) -> dict[str, str]:
+def get_config(file_path: str) -> dict[str, Any]:
     """
     Get configuration file
     """

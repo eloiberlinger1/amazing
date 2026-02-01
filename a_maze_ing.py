@@ -7,11 +7,12 @@ import sys
 import os
 import termios
 import tty
+from typing import Any, List, Tuple
 from config_loader import get_config
 from mazegen import MazeManager, BFS
 
 
-def get_input():
+def get_input() -> str:
     """Get a single character from stdin without requiring Enter"""
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -23,12 +24,12 @@ def get_input():
     return ch
 
 
-def clear_screen():
+def clear_screen() -> None:
     """Clear the terminal screen"""
     os.system("clear" if os.name != "nt" else "cls")
 
 
-def print_banner():
+def print_banner() -> None:
     """Print the ASCII banner"""
     print()
     print(
@@ -53,7 +54,7 @@ def print_banner():
     print("\n\n\n\n")
 
 
-def print_menu(show_path: bool, color: str):
+def print_menu(show_path: bool, color: str) -> None:
     """Print the interactive menu as an ASCII table"""
     path_status = "ON" if show_path else "OFF"
     color_status = color
@@ -71,7 +72,7 @@ def print_menu(show_path: bool, color: str):
     print(menu, end="", flush=True)
 
 
-def print_color_submenu():
+def print_color_submenu() -> None:
     """Print the color selection submenu"""
     menu = """
                     COLOR SELECTION MENU
@@ -86,14 +87,14 @@ def print_color_submenu():
     print(menu, end="", flush=True)
 
 
-def generate_maze(config):
+def generate_maze(config: dict[str, Any]) -> MazeManager:
     """Generate a new maze"""
     mm = MazeManager(config)
     mm.generate_maze_dfs()
     return mm
 
 
-def calculate_path(mm: MazeManager):
+def calculate_path(mm: MazeManager) -> List[Tuple[int, int]] | None:
     """Calculate the shortest path for the maze"""
     bfs = BFS()
     path = bfs.shortest_path(
@@ -106,7 +107,11 @@ def calculate_path(mm: MazeManager):
     return path
 
 
-def display_maze(mm: MazeManager, path: list = [None], show_path: bool = True):
+def display_maze(
+    mm: MazeManager,
+    path: List[Tuple[int, int]] | None = None,
+    show_path: bool = True,
+) -> None:
     """Display the maze with optional path"""
     if path is None:
         path = []
@@ -115,7 +120,7 @@ def display_maze(mm: MazeManager, path: list = [None], show_path: bool = True):
     mm.print_maze(path)
 
 
-def main():
+def main() -> None:
     """
     Main entrypoint of the programm
     """
@@ -176,8 +181,6 @@ def main():
                     break
 
                 if color_choice in color_map:
-                    config["COLOR"] = color_map[color_choice]
-                    mm.config = config
                     mm.color = color_map[color_choice]
                     clear_screen()
                     print_banner()

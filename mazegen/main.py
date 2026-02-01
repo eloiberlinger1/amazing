@@ -304,7 +304,9 @@ class MazeManager:
                     cell.west = True
                     self.get_maze_cell_from_coordinate((r, c - 1)).east = True
 
-    def generate_maze_dfs(self, seed: int = None) -> List[List[MazeCell]]:
+    def generate_maze_dfs(
+        self, seed: int | None = None
+    ) -> List[List[MazeCell]]:
         if seed is not None:
             self.rng.seed(seed)
         # All cells start as unvisited
