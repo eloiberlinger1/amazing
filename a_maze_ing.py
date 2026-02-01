@@ -67,8 +67,7 @@ def print_menu(show_path: bool, color: str):
       └─ Current: {color_status}
   [Q] Quit
 ----------------------------------------------------------
-
-Press a key: """
+"""
     print(menu, end="", flush=True)
 
 
@@ -83,8 +82,7 @@ def print_color_submenu():
   [4] Yellow
   [B] Back to main menu
 ----------------------------------------------------------
-
-Press a key: """
+"""
     print(menu, end="", flush=True)
 
 
@@ -177,6 +175,12 @@ def main():
 
                 if color_choice in color_map:
                     config["COLOR"] = color_map[color_choice]
+                    mm.config = config
+                    mm.color = color_map[color_choice]
+                    clear_screen()
+                    print_banner()
+                    display_maze(mm, path, show_path)
+                    print_color_submenu()
                     break
 
         elif choice == "Q" or choice == "\x1b":  # \x1b = ESC

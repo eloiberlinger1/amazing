@@ -1,35 +1,43 @@
 MAIN = a_maze_ing.py
 PYTHON = python3
+VENV = .venv
+VENV_PYTHON = $(VENV)/bin/python3
+VENV_PIP = $(VENV)/bin/pip
 
-args = $(filter-out $@,$(MAKECMDGOALS))
+ARGS := $(wordlist 2, 999, $(MAKECMDGOALS))
+
+.PHONY: all run install lint debug clean
 
 all:
 	@echo "Usage: make run <config_file>"
 
-run:
-	@if [ -z "$(args)" ]; then \
-		echo "Error: No configuration file specified!"; \
-		echo "Usage: make run <config_file>"; \
-		exit 1; \
-	fi
-	$(PYTHON) $(MAIN) $(args)
+install: $(VENV)/bin/activate
 
-lint:
-	flake8 ./
-	mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+$(VENV)/bin/activate: requirements.txt
+	@echo "Creating venv..."
+	$(PYTHON) -m venv $(VENV)
+	@echo "Installing depedencies..."
+	$(VENV_PIP) install --upgrade pip
+	$(VENV_PIP) install -r requirements.txt
+	@touch $(VENV)/bin/activate
 
-install:
-	echo install
+run: install
+	@if [ -z "$(ARGS)" ]; then echo "Error: No config file"; exit 1; fi
+	$(VENV_PYTHON) $(MAIN) $(ARGS)
 
-debug:
-	echo debug
+lint: install
+	$(VENV_PYTHON) -m flake8 ./
+	$(VENV_PYTHON) -m mypy --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs .
 
-lint-strict:
-	echo lint_strict
+debug: install
+	$(VENV_PYTHON) -m pdb $(MAIN) $(ARGS)
 
 clean:
 	rm -rf ./__pycache__
 	rm -rf */__pycache__
 	rm -rf .mypy_cache
+	rm -rf $(VENV)
 
-.PHONY: all run lint install debug lint-strict clean
+# Catch-all
+%:
+	@:
