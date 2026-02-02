@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 version = "1.0.0"
 name = "mazegen"
 description = "A-Maze-ing"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = ["numpy>=2.1.0"]
 
 [tool.setuptools]
