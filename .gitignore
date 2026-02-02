@@ -18,7 +18,6 @@ env/
 dist/
 build/
 *.egg-info/
-*.whl
 *.tar.gz
 
 # Fichiers de configuration IDE
