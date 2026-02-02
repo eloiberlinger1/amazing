@@ -8,7 +8,7 @@ ARGS := $(wordlist 2, 999, $(MAKECMDGOALS))
 
 .PHONY: all run install lint debug clean re
 
-all:
+all: install
 	@echo "Usage: make run <config_file>"
 
 install: $(VENV)/bin/activate
