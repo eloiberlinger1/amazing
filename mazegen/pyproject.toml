@@ -7,7 +7,7 @@ version = "1.0.0"
 name = "mazegen"
 description = "A-Maze-ing"
 requires-python = ">=3.11"
-dependencies = ["numpy>=2.4.1"]
+dependencies = ["numpy>=2.1.0"]
 
 [tool.setuptools]
 packages = ["mazegen"]
