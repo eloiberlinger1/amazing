@@ -377,6 +377,7 @@ class MazeManager:
             color=self.color,
         )
         myprintmaze = renderer.render(self, path)
+        self.check_42_pattern_availability()
         print(myprintmaze)
 
 
