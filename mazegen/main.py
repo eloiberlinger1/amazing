@@ -386,19 +386,3 @@ if __name__ == "__main__":
 
 # seed()      → 决定“随机序列长什么样”
 # random()   → 从这个序列里取下一个 0~1 的数
-
-# Status Summary (Submission Notes)
-# [DONE]
-# DFS maze generation (seeded, PERFECT / imperfect)
-# Wall consistency (N / E / S / W)
-# 42 pattern handled
-# BFS shortest path algorithm works
-# !!! Output file
-# 2.1 Hex wall encoding
-# 2.2 Write maze grid to OUTPUT_FILE
-# 2.3 Append ENTRY, EXIT, shortest path (N/E/S/W)
-
-# [TO DO]
-# !!! 3×3 open area rule
-# 3.1 Detect 3×3 open areas
-# 3.2 Regenerate maze if invalid
