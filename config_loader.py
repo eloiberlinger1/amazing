@@ -13,6 +13,7 @@ def check_values(c: dict[str, Any]) -> dict[str, Any]:
     Check the configuration file values
     (c => config_data)
     """
+
     if c["HEIGHT"] <= 0:
         raise TypeError("Height value needs to be at least 1")
     elif c["WIDTH"] <= 0:
@@ -75,6 +76,7 @@ def get_config(file_path: str) -> dict[str, Any]:
     """
     Get configuration file
     """
+
     config_data: dict[str, Any] = {}
     try:
         with open(file_path, "r") as f:

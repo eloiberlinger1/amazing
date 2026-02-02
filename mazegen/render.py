@@ -55,6 +55,7 @@ class MazeRender:
         color: str = "Default",
     ):
         """Initialize Maze renderer with entry and exit points"""
+
         self.entry = entry
         self.exit = exit
         self.height = 0
@@ -68,6 +69,7 @@ class MazeRender:
         """
         Get the canevas
         """
+
         c_h = self.canevas_h
         c_w = self.canevas_w
 
@@ -148,6 +150,7 @@ class MazeRender:
         """
         Write the path to solve the maze in the output file
         """
+
         if path is None:
             path = []
         directions = path_to_directions(path)
@@ -172,6 +175,7 @@ class MazeRender:
         """
         Print the maze
         """
+
         self.maze = generated_maze.maze
         self.height = generated_maze.height
         self.width = generated_maze.width

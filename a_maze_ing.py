@@ -14,6 +14,7 @@ from mazegen import MazeManager, BFS
 
 def get_input() -> str:
     """Get a single character from stdin without requiring Enter"""
+
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     try:
@@ -26,11 +27,13 @@ def get_input() -> str:
 
 def clear_screen() -> None:
     """Clear the terminal screen"""
+
     os.system("clear" if os.name != "nt" else "cls")
 
 
 def print_banner() -> None:
     """Print the ASCII banner"""
+
     print()
     print(
         (
@@ -56,6 +59,7 @@ def print_banner() -> None:
 
 def print_menu(show_path: bool, color: str) -> None:
     """Print the interactive menu as an ASCII table"""
+
     path_status = "ON" if show_path else "OFF"
     color_status = color
 
@@ -74,6 +78,7 @@ def print_menu(show_path: bool, color: str) -> None:
 
 def print_color_submenu() -> None:
     """Print the color selection submenu"""
+
     menu = """
                     COLOR SELECTION MENU
 ----------------------------------------------------------
@@ -89,6 +94,7 @@ def print_color_submenu() -> None:
 
 def generate_maze(config: dict[str, Any]) -> MazeManager:
     """Generate a new maze"""
+
     mm = MazeManager(config)
     mm.generate_maze_dfs()
     return mm
@@ -96,6 +102,7 @@ def generate_maze(config: dict[str, Any]) -> MazeManager:
 
 def calculate_path(mm: MazeManager) -> List[Tuple[int, int]] | None:
     """Calculate the shortest path for the maze"""
+
     bfs = BFS()
     path = bfs.shortest_path(
         maze=mm.maze,
@@ -113,6 +120,7 @@ def display_maze(
     show_path: bool = True,
 ) -> None:
     """Display the maze with optional path"""
+
     if path is None:
         path = []
     if not show_path:
@@ -124,6 +132,7 @@ def main() -> None:
     """
     Main entrypoint of the program
     """
+
     print_banner()
 
     if len(sys.argv) >= 2:

@@ -1,6 +1,6 @@
 # mandatory
-WIDTH=4
-HEIGHT=4
+WIDTH=14
+HEIGHT=14
 ENTRY=0,1
 EXIT=1,3
 OUTPUT_FILE=maze.txt

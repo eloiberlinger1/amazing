@@ -12,7 +12,8 @@ class MazeManager:
     """Manages maze generation, storage and display operations"""
 
     def __init__(self, config: dict[str, Any]) -> None:
-        # Validate required configuration keys
+        """ Validate required configuration keys"""
+
         required_keys = (
             "HEIGHT",
             "OUTPUT_FILE",
@@ -207,6 +208,7 @@ class MazeManager:
             Dictionary mapping direction strings ("north", ..., "west")
             to MazeCell objects that are unvisited neighbors
         """
+
         ava_neighbors: Dict[str, MazeCell] = {}
         r, c = current_cell.coordinates
         north = (r - 1, c)
@@ -229,6 +231,7 @@ class MazeManager:
         Add extra openings to create loops (non-perfect maze)
         Note: it does not guarantee another well-looped path
         """
+
         threshold = 0.35
 
         for row in self.maze:
@@ -309,6 +312,8 @@ class MazeManager:
     def generate_maze_dfs(
         self, seed: int | None = None
     ) -> List[List[MazeCell]]:
+        """Generate the maze by using DFS."""
+
         if seed is not None:
             self.rng.seed(seed)
         # All cells start as unvisited
@@ -370,6 +375,7 @@ class MazeManager:
         """
         Use the render to print the maze
         """
+
         renderer = MazeRender(
             o_file=self.o_file,
             entry=self.entry,
