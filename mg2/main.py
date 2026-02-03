@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Tuple, Dict
+import random
 
 
 @dataclass
@@ -45,10 +46,13 @@ def get_maze():
         print()
 
     start = (0, 0)
-    visited_cells = []
+    visited = {start}
+    path = [start]
 
-    cell_map[start] = 1
-    visited_cells += cell_map[start]
+    while path:
+        current = path[-1]
+
+        r, c = current
 
 
 get_maze()
