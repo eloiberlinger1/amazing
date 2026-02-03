@@ -139,9 +139,14 @@ def main() -> None:
         config_file = sys.argv[1]
     else:
         print("Correct usage: python3 a_maze_ing.py <config_file>")
-        exit()
+        exit(1)
 
-    config = get_config(config_file)
+    try:
+        config = get_config(config_file)
+    except Exception as e:
+        print(f"Error : {e}")
+        exit(1)
+
     config["COLOR"] = "Default"
     if config.get("SEED") is None:
         config["SEED"] = None

@@ -92,12 +92,12 @@ def get_config(file_path: str) -> dict[str, Any]:
         print(f"File not found {e}")
         exit()
 
-    apply_types(config_data)
     try:
+        apply_types(config_data)
         check_values(config_data)
     except Exception as e:
-        print(f"Invalid config file value ! Error: {e}")
-        exit()
+        print(f"Invalid config file value ! Error: {e}\n")
+        exit(1)
 
     return config_data
 
