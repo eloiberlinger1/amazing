@@ -200,7 +200,7 @@ AI was used for:
 - **Documentation**: Generating docstrings and explanatory comments
 - **Testing and validation**: Checking algorithm logic
 - **Optimization**: Suggestions for better performance and readability
-- **Redaction**: Writing this elegant georgerous beautifull amazing README file.
+- **Redaction**: **Writing this elegant georgerous beautifull amazing README file.**
 
 ## Team management & planning
 
